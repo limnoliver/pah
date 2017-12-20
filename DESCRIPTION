@@ -1,0 +1,13 @@
+Package: pah
+Type: Package
+Title: Common Analyses for Polycyclic Aromatic Hydrocarbons (PAH) Data
+Version: 0.1.0
+Author: Samantha Oliver, Austin Baldwin
+Maintainer: The package maintainer <soliver@usgs.gov>
+Description: This package recreates common analyses and figures to calculate biological impact and
+sources of PAHs in aquatic sediments. Each individual analysis has major caveats and limitations, but 
+together can be used as a weight-of-evidence approach to understand the impact and sources of PAH 
+contamination in the environment. 
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
