@@ -1,0 +1,63 @@
+---
+title: "Multiple Lines of Evidence for the Effects and Sources of PAHs"
+author: "Samantha Oliver"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+There are several techniques that can be used to identify the sources of contaminants in the 
+environment. For polycyclic aromatic hydrocarbons (PAHs), there is no one perfect test, and many
+methods have limitations. However, taken together, a multiple-lines-of-evidence approach can
+give us more confidence in the sources of these contaminants in the environment. This package uses
+common PAH input data (source profiles, sample profiles) and generates the analyses and figures 
+of the multiple-lines-of-evidence approach used by Baldwin et al. 2017. 
+
+## Package Overview
+
+The package can produce the analyses and figures required for 7 of the 8 lines of evidence
+used by Baldwin et al. (2017). The primary input into the package is either a set of USGS site IDs that can be used to call data from NWIS using `getPAH` which is a wrapper for functions in the package `dataRetrieval`, or a spreadsheet of PAH concentration data with corresponding site IDs. `processPAH` can take your PAH data and do common tasks, like deciding what to do with nondetects or values below detection limit, and modifying the dataframe from a wide to long format, and vice versa. 
+
+## Step 1: Basic Visualizations of the Data
+
+An important first step is to visualize the data to see the magnitude and ranges of PAH concentrations by different compounds and sites. This can be accomplished using the `PAHbysite` function. If your dataset includes a grouping ID (e.g., sites nested within watershets), you can order and label the data by groups.  
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
