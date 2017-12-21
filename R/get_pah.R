@@ -21,4 +21,3 @@ getPAH <- function(sites, pcodes = pah_pcodes, startDate, endDate) {
 
 }
 
-test <- getPAH(sites = '040870377', startDate = "2014-04-01", endDate = "2014-09-01")
