@@ -15,7 +15,7 @@
 #' @name pah_compounds
 #' @rdname sampleData
 #' @docType data
-#' @format A data frame with 85 observations of 20 variables:
+#' @format A data frame with 84 observations of 18 variables:
 #' \describe{
 #'   \item{pcode}{USGS parameter code}
 #'   \item{schedule}{USGS lab schedule}
