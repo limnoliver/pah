@@ -2,19 +2,15 @@
 #'
 #' A vector of pcodes related to PAH analysis identified in Baldwin et al. (2017).
 #'
-#' @name pah_pcodes
-#' @rdname sampleData
-#' @docType data
 #' @examples
 #' length(pah_pcodes)
 "pah_pcodes"
 
+#' PAH compound metadata
+#'
 #' A table of PAH compound names, abbreviations, pcodes, and supporting information such as
 #' molecular weights and whether the compound is a parent or alkylated compound.
 #'
-#' @name pah_compounds
-#' @rdname sampleData
-#' @docType data
 #' @format A data frame with 84 observations of 18 variables:
 #' \describe{
 #'   \item{pcode}{USGS parameter code}

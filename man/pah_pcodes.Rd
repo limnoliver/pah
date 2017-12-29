@@ -3,22 +3,15 @@
 \docType{data}
 \name{pah_pcodes}
 \alias{pah_pcodes}
-\alias{pah_compounds}
 \title{Default PAH pcodes}
 \format{An object of class \code{character} of length 84.}
 \usage{
 pah_pcodes
-
-pah_compounds
 }
 \description{
 A vector of pcodes related to PAH analysis identified in Baldwin et al. (2017).
-
-A table of PAH compound names, abbreviations, pcodes, and supporting information such as
-molecular weights and whether the compound is a parent or alkylated compound.
 }
 \examples{
 length(pah_pcodes)
-head(pah_compounds$Parameter)
 }
 \keyword{datasets}
