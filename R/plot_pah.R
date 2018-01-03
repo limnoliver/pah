@@ -15,18 +15,25 @@
 #' @importFrom dplyr order_by
 #' @importFrom dplyr group_by
 #' @importFrom dplyr summarise
+#' @importFrom forcats fct
 #' @examples
 #'
 plot_pah <- function(pah_dat, conc_column = "Value", sample_id_column = "Sample",
-                     compound_column = "Parameter",
+                     compound_column = "Parameter", compound_plot = "Total PAH",
                      color_column = NA, group_column = NA) {
+  pah_dat_temp <- filter(pah_dat, compound_column %in% compound_plot)
   if (anyNA(group_column)) {
     p <- ggplot(pah_dat_temp, aes(x = reorder(sample_id_column, Value), y = Value)) +
       geom_bar(stat="identity", position="identity", colour="black")
     if (!is.na(color_column)) {
     p <- p + aes(fill = color_column)
     }
+
+    if (length(compound_column) > 1) {
+      p <- p + facet_wrap(~compound_column, ncol = ifelse(length(compound_plot) > 3, 2, 1))
+    }
+  } else {
+
+
   }
-
-
 }
