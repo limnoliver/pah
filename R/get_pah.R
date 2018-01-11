@@ -9,10 +9,6 @@
 #' @param startDate start date from which to pull data, in YYY-MM-DD format
 #'
 #' @importFrom dataRetrieval readNWISqw
-#' @importFrom dataRetrieval renameNWISColumns
-#' @importFrom dplyr mutate
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarise
 #' @examples
 
 getPAH <- function(sites, pcodes = pah_pcodes, startDate, endDate) {

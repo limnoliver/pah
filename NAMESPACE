@@ -2,7 +2,10 @@
 
 export(getPAH)
 export(get_compound_info)
+export(plot_pah)
 export(summary_dv)
+import(dplyr)
+import(ggplot2)
 importFrom(dataRetrieval,readNWISdv)
 importFrom(dataRetrieval,readNWISqw)
 importFrom(dataRetrieval,renameNWISColumns)

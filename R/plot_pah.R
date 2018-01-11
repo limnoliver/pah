@@ -11,11 +11,8 @@
 #' @param compound_plot a vector of strings identifying which compounds from compound_column to include in the plot. If more than one compound is given, the plot will be faceted by compound.
 #' @param color_column a column with group variable by which to color code bars
 #' @param group_column a vector of one or more columns with grouping variables that will be used to order the bars. Groups should be listed from highest to lowest order.
-#' @importFrom ggplot2
-#' @importFrom dplyr order_by
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarise
-#' @importFrom forcats fct
+#' @import ggplot2
+#' @import dplyr
 #' @examples
 #'
 plot_pah <- function(pah_dat, conc_column = "Value", sample_id_column = "Sample",
@@ -60,7 +57,8 @@ plot_pah <- function(pah_dat, conc_column = "Value", sample_id_column = "Sample"
       facet_grid(PARAM_SYNONYM~State, space = "free_x", scales = 'free_x') +
       barchart_theme() +
       labs(x = "", y = paste0("Concentration (", conc_units, ")")) +
-      scale_y_log10(breaks = seq(round(min(pah_dat_temp[[conc_column]]), 0), labels = c(10, 100,1000, 10000,100000))
+      scale_y_log10(breaks = seq(round(min(pah_dat_temp[[conc_column]]), 0)),
+                                 labels = c(10, 100,1000, 10000,100000))
 
       if (!is.na(color_column)) {
         p <- p + aes(fill = color_column)
