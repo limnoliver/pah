@@ -10,31 +10,40 @@
 #' @param compound_column column name that contains PAH compound names. This can also include other chemicals, or sums of chemicals.
 #' @param compound_plot a vector of strings identifying which compounds from compound_column to include in the plot. If more than one compound is given, the plot will be faceted by compound.
 #' @param color_column a column with group variable by which to color code bars
-#' @param group_column a vector of one or more columns with grouping variables that will be used to order the bars. Groups should be listed from highest to lowest order.
+#' @param group_column a column by which to group and order the bars.
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom rlang .data
+#' @importFrom rlang sym
 #' @examples
 #'
-plot_pah <- function(pah_dat, conc_column = "Value", sample_id_column = "Sample",
-                     compound_column = "Parameter", compound_plot = "Total PAH",
+plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample',
+                     compound_column = 'Parameter', compound_plot = "Total PAH",
                      color_column = NA, group_column = NA, conc_units = "ppb") {
+  quo_compound_column <- sym(compound_column)
+  quo_conc_column <- sym(conc_column)
+  quo_sample_id_column <- sym(sample_id_column)
+  quo_group_column <- sym(group_column)
 
-  pah_dat_temp <- filter(pah_dat, compound_column %in% compound_plot)
-  barchart_theme <- theme(axis.text.x = element_text(angle = 90, hjust = 1),
-                          legend.position = "bottom", panel.spacing=unit(5,"pt"), strip.background = element_blank(),
+  pah_dat_temp <- filter(pah_dat, (!!quo_compound_column) %in% compound_plot)
+
+  barchart_theme <- theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+                          legend.position = "top", panel.spacing=unit(5,"pt"), strip.background = element_blank(),
                           strip.text = element_text(margin = margin(4,10,4,10, unit="pt")))
-  ybreaks <- c(round(min(log10(pah_dat_temp[[conc_column]])), 0), round(max(log10(pah_dat_temp[[conc_column]])), 0))
-  yticklabs <- 10^(ybreaks[1]:ybreaks[2])
+
+  yvals <- c(round(min(log10(pah_dat_temp[[conc_column]])), 0), round(max(log10(pah_dat_temp[[conc_column]])), 0))
+  ybreaks <- yvals[1]:yvals[2]
+  yticklabs <- 10^(yvals[1]:yvals[2])
 
   if (anyNA(group_column)) {
     # plotting if there is no grouping column given
-    p <- ggplot(pah_dat_temp, aes(x = reorder(sample_id_column, Value), y = Value)) +
+    p <- ggplot(pah_dat_temp, aes_string(x = reorder(sample_id_column, conc_column), y = conc_column)) +
       geom_bar(stat="identity", position="identity", colour="black") +
-      barchart_theme() +
+      barchart_theme +
       labs(x = "", y = paste0("Concentration (", conc_units, ")"))
     if (!is.na(color_column)) {
       # add color if color column is given
-    p <- p + aes(fill = color_column)
+    p <- p + aes_string(fill = color_column)
     }
 
     if (length(compound_column) > 1) {
@@ -45,24 +54,40 @@ plot_pah <- function(pah_dat, conc_column = "Value", sample_id_column = "Sample"
     # now handle groups if groups are given
     # first group data, calculate mean by group to determine group order
     temp.order <- pah_dat_temp %>%
-      group_by(group_column[1]) %>%
-      summearize(mean = mean(conc_column)) %>%
-      arrange(mean)
+      group_by(!!quo_group_column) %>%
+      summarize(max = max(!!quo_conc_column)) %>%
+      arrange(max)
 
-    pah_dat_temp[group_column[1]] <- factor(pah_dat_temp[[group_column[1]]],
-                                                         levels = temp.order[[group_column[1]]])
-    p <- ggplot(pah_dat_temp, aes(x = sample_id_column, y = Value)) +
-      geom_bar(width = 0.8, position = position_dodge(width = 2), colour="black" ) +
+    pah_dat_temp[group_column] <- factor(pah_dat_temp[[group_column]],
+                                                         levels = temp.order[[group_column]])
+
+    pah_dat_temp <- pah_dat_temp %>%
+      ungroup() %>%
+      mutate(thresholdPEC = ifelse((!!quo_compound_column) == "Priority Pollutant PAH", 22800, NA),
+             thresholdTEC = ifselse((!!quo_compound_column) == "Priority Pollutant PAH", 1610, NA))
+
+    dummy.dat <- pah_dat_temp %>%
+      select(!!quo_group_column, !!quo_compound_column, thresholdPEC, thresholdTEC) %>%
+      distinct()
+
+    p <- ggplot(pah_dat_temp, aes_string(x = paste0('reorder(',sample_id_column,',',conc_column,")"), y = conc_column)) +
+      geom_bar(stat = 'identity', width = 0.8, position = position_dodge(width = 2), colour="black" ) +
       # need to test this: does this work of PARAM_SYNYNOYM is one variable?
-      facet_grid(PARAM_SYNONYM~State, space = "free_x", scales = 'free_x') +
-      barchart_theme() +
+      geom_hline(data = dummy.dat, aes(yintercept = thresholdPEC)) +
+      geom_hline(data = dummy.dat, aes(yintercept = thresholdTEC)) +
+      facet_grid(as.formula(paste(".~", group_column)),
+                 space = "free_x", scales = 'free_x', switch = 'x') +
+      barchart_theme +
       labs(x = "", y = paste0("Concentration (", conc_units, ")")) +
-      scale_y_log10(breaks = seq(round(min(pah_dat_temp[[conc_column]]), 0)),
-                                 labels = c(10, 100,1000, 10000,100000))
+      scale_y_continuous(breaks = 10^ybreaks, labels = yticklabs, trans = 'log10') +
+      theme(strip.text.x = element_text(angle = 90, hjust = 1),
+            panel.spacing = unit(0.2, "lines"), strip.placement = 'outside')
+
 
       if (!is.na(color_column)) {
-        p <- p + aes(fill = color_column)
+        p <- p + aes_string(fill = color_column)
       }
 
   }
+  return(p)
 }

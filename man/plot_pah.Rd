@@ -21,7 +21,7 @@ plot_pah(pah_dat, conc_column = "Value", sample_id_column = "Sample",
 
 \item{color_column}{a column with group variable by which to color code bars}
 
-\item{group_column}{a vector of one or more columns with grouping variables that will be used to order the bars. Groups should be listed from highest to lowest order.}
+\item{group_column}{a column by which to group and order the bars.}
 }
 \description{
 Create a bar plot of PAH concentrations. The function allows you to group the data by one
