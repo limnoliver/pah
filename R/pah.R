@@ -23,4 +23,28 @@
 #' head(pah_compounds$Parameter)
 "pah_compounds"
 
+#' PAH source profiles
+#'
+#' A table of various PAH sources and the associated 12-PAH compound profiles. These are the source
+#' profiles used in Baldwin et al. (2017).
+#'
+#' @format A data frame with 12 observations of 24 variables:
+#' \describe{
+#'   \item{Compound}{USGS parameter code}
+#'   \item{Abbreviation}{Compound abbreviation used for plotting}
+#'   \item{pcode}{USGS parameter code}
+#'   \item{Power_plant_emissions}{Power plant emissions profile, from ...}
+#'   \item{Residential_heating}{Residential heating profile, from...}
+#'   \item{Coal_average}{The average coal profile, from ...}
+#'   \item{Coke_oven_emissions}{Profile from coking emissions, from ...}
+#'   \item{Diesel_vehicle}{PAH profile from diesel vehicles, from ...}
+#'   \item{Gasoline_vehicle}{PAH profile from gasoline vehicles, from ...}
+#'   \item{Traffic_tunnel_air}{PAH profiles of traffic tunnel air, from ...}
+#'   \item{Vehicle_traffic_avg}{The average PAH profile from vehicle traffic emissions, from ...}
+#'   \item{casrn}{The chemical identification number.}
+#'   }
+#' @examples
+#' head(source_profiles)
+"source_profiles"
+
 
