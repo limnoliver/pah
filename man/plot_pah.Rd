@@ -9,7 +9,9 @@ plot_pah(pah_dat, conc_column = "Value", sample_id_column = "Sample",
   color_column = NA, group_column = NA, conc_units = "ppb")
 }
 \arguments{
-\item{pah_dat}{dataframe with PAH concentrations}
+\item{pah_dat}{dataframe with PAH concentrations. It is recommended that entire samples with censored observations
+(e.g., below detection limit) are removed from this data frame prior to calculating the difference between source and samples.
+This function assumes these samples have already been removed.}
 
 \item{conc_column}{column that contains PAH concentrations}
 
