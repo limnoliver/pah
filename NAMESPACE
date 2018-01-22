@@ -2,6 +2,7 @@
 
 export(getPAH)
 export(get_compound_info)
+export(pah_profiler)
 export(plot_pah)
 export(summary_dv)
 import(dplyr)
