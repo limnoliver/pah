@@ -4,7 +4,9 @@
 #' or more variables, and decide which grouping variables will determine order or color.
 #'
 #' @export
-#' @param pah_dat dataframe with PAH concentrations
+#' @param pah_dat dataframe with PAH concentrations. It is recommended that entire samples with censored observations
+#' (e.g., below detection limit) are removed from this data frame prior to calculating the difference between source and samples.
+#' This function assumes these samples have already been removed.
 #' @param conc_column column that contains PAH concentrations
 #' @param sample_id_column column name that contains unique sample id
 #' @param compound_column column name that contains PAH compound names. This can also include other chemicals, or sums of chemicals.
