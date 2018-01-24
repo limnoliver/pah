@@ -18,6 +18,7 @@
 #' each sample/source combination, and the chi2 value is summed across all compounds to create a distance
 #' metric between each sample and source profile.
 #' @import dplyr
+#' @importFrom tidyr gather
 #' @importFrom rlang sym
 #' @examples
 
