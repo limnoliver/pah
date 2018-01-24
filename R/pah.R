@@ -47,4 +47,26 @@
 #' head(source_profiles)
 "source_profiles"
 
+#' PAH source ratios
+#'
+#' A table of various PAH sources and associated PAH ratios. These source ratios come from various sources,
+#' and the citation is included in the table. These ratios can be used to calculate distance in a
+#' double ratio plot.
+#'
+#' @format A data frame with 36 observations of 9 variables:
+#' \describe{
+#'   \item{sourceCategory}{Type of material sampled.}
+#'   \item{sourceNo}{Unique identifier for the source material.}
+#'   \item{sourceID}{Source descriptor.}
+#'   \item{abbrev}{Source abbreviation (for plotting).}
+#'   \item{Reference}{Published paper which contains the source ratios.}
+#'   \item{Anth_AnthPhen}{The ratio of anthracene to anthracene plus phenanthrene.}
+#'   \item{Flua_FluaPyr}{The ratio of fluoranthene to fluoranthene plus pyrene.}
+#'   \item{Baa_BaaCh}{The ratio of benzo(a)anthracene to benzo(a)anthracene plus chrysene.}
+#'   \item{Indpy_IndpyBghip}{The ratio of indeno(1,2,3-cd)pyrene to indeno(1,2,3-cd)pyrene plus benzo(g,h,i)perylene.}
+#'   }
+#' @examples
+#' head(source_ratios)
+"source_ratios"
+
 
