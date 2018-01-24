@@ -24,7 +24,7 @@
 #' @importFrom rlang sym
 #' @examples
 
-plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources = NA, samples = 'all',
+plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA, samples = 'all',
                           sample_column = 'sample_id', include_creosote = F) {
   quo_sample_column <- sym(sample_column)
   if (plot_type == 'boxplot') {
