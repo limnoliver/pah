@@ -4,28 +4,24 @@
 \alias{calc_ratio_dist}
 \title{calc_ratio_distance}
 \usage{
-calc_ratio_dist(ratio_dat, summary_type = "sample")
+calc_ratio_dist(ratio_dat)
 }
 \arguments{
 \item{ratio_dat}{The output of calc_ratios, which includes the four ratios of interest for both sources
 and samples.}
-
-\item{summary_type}{Whether the distances should be exported as the raw distances and ranks for each
-double ratio plot, source, and sample combination ("raw"),
-or summarized by "sample" or by "source". If the data are summarized by source,
-the generated table contains a source in each row, and the mean distance and rank between that source
-and all samples. This will help discern which sources are closest to the samples overall (or on average). If the distances are summarized
-If the data are summarized by sample, the generated table contains a sample in each row, and the top ranked
-source for each double ratio comparison. This will help discern the likely source for each sample.}
 }
 \value{
-A data frame that contains a column `sample_id` which contains the original sample identifiers,
-as well as the unique identifiers of each source contained in `source_profiles`. The source and sample
-ratios are defined in the `sample_type` column which is defined as either `source` or `sample`. Additionally,
-four columns of ratios are included: Anth_AnthPhen (ratio of anthracene to anthracene plus phenanthrene),
-Flua_FluaPyr (ratio of fluoranthene to fluoranthene plus pyrene), Baa_BaaCh (ratio of benzo(a)anthracene
-to benzo(a)anthracene plus chrysene), Indpy_IndpyBghip (ratio of indeno(1,2,3-cd)pyrene to
-indeno(1,2,3-cd)pyrene plus benzo(g,h,i)perylene).
+A list of three data frames, which includes 1) distances for each
+double ratio plot, source, and sample combination, along with the ranking of each source by sample (1 = closest) for each
+double ratio plot ("raw"), 2) distances summarized by source, which contains the mean
+distance, rank, and the number of top ranks calculated for each source and double ratio plot combination ("source"),
+3) distances summarized by sample, which reports the top-ranked source for each sample and double
+ratio combination ("sample"). Abbreviations for the ratios include: Anth_AnthPhen or AAP (ratio of anthracene
+to anthracene plus phenanthrene), Flua_FluaPyr or FFP (ratio of fluoranthene to fluoranthene plus pyrene),
+Baa_BaaCh or BBC (ratio of benzo(a)anthracene to benzo(a)anthracene plus chrysene), Indpy_IndpyBghip or IIB (ratio
+of indeno(1,2,3-cd)pyrene to indeno(1,2,3-cd)pyrene plus benzo(g,h,i)perylene). Each double ratio comparison
+is distinguished by the shorter of the abbreviations separated by an underscore (e.g., FFP_AAP is one double ratio
+comparison).
 }
 \description{
 Calculates the Euclidean distances between samples and sources from
