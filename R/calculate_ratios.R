@@ -33,13 +33,21 @@ calc_ratios <- function(pah_dat, sample_column = 'sample_id', conc_column) {
   # remove 0 (BDL) values for compounds that we will use
   # this includes pcodes c(63208, 63180, 64111, 63610, 64118, 64113)
   # or casrn
-  casrn.keep <- c('206-44-0', '120-12-7', '205-99-2', '56-55-3', '191-24-2')
+  casrn.keep <- c("120-12-7", "85-01-8","206-44-0",  "129-00-0", "193-39-5", "191-24-2", "56-55-3", "218-01-9")
   pah_temp <- filter(pah_dat, casrn %in% casrn.keep)
 
   # get a list of sites to remove - that is, those that have conc = 0
-  sites.drop <- unique(pah_temp[, sample_column][pah_temp[, conc_column] == 0])
-  pah_temp <- filter(pah_temp, !((!!quo_sample_column) %in% sites.drop)) %>%
-    select(!!quo_sample_column, casrn, !!quo_conc_column)
+  sites.drop <- filter(pah_temp, !!quo_conc_column == 0) %>%
+    select(!!quo_sample_column) %>%
+    distinct()
+
+  sites.drop <- sites.drop[[1]]
+
+  if (length(sites.drop) > 0) {
+    pah_temp <- filter(pah_temp, !((!!quo_sample_column) %in% sites.drop))
+  }
+    pah_temp <- pah_temp %>%
+      select(!!quo_sample_column, casrn, !!quo_conc_column)
 
   pah_dat_wide <- pah_temp %>%
     spread(key = casrn, value = !!quo_conc_column)
@@ -49,7 +57,7 @@ calc_ratios <- function(pah_dat, sample_column = 'sample_id', conc_column) {
            Flua_FluaPyr = `206-44-0`/ (`206-44-0` + `129-00-0`),
            Indpy_IndpyBghip = `193-39-5`/(`193-39-5` + `191-24-2`),
            Baa_BaaCh = `56-55-3`/(`56-55-3` + `218-01-9`)) %>%
-    select(!!quo_sample_column, Anth_AnthPhen:Indpy_IndpyBghip) %>%
+    select(!!quo_sample_column, Anth_AnthPhen:Baa_BaaCh) %>%
     mutate(sample_type = 'sample') %>%
     rename(sample_id = !!quo_sample_column)
 
@@ -59,5 +67,6 @@ calc_ratios <- function(pah_dat, sample_column = 'sample_id', conc_column) {
     mutate(sample_type = 'source') %>%
     bind_rows(pah_dat_wide)
 
-  return(ratios)
+    return(ratios)
+
 }
