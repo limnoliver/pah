@@ -96,7 +96,7 @@ calc_ratio_dist <- function(ratio_dat) {
               top_source2 = source[which.min(diff2)],
               top_source3 = source[which.min(diff3)])
 
-  return_dat <- list(ranks, mean.sources, top.sources)
+  return_dat <- list(ranks, mean.sources, by.samples)
   names(return_dat) <- c('raw', 'source', 'sample')
 
   return(return_dat)
