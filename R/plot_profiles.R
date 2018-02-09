@@ -13,7 +13,7 @@
 #' @param sources_plot If `plot_type` = `profile`, include a vector of sources that you want to include
 #' in a profile plot to compare to samples. Set equal to "all" to include paneled plots of all source profiles.
 #' @param sample_column Column that contains unique sample IDs.
-#' @param samples If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
+#' @param samples_plot If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
 #' Can either be a single unique ID or "all" to indicate taking the mean and standard deviation of all samples.
 #' @param include_creosote Logical, whether to include the source profiles for creosote (n = 2). The source profiles
 #' for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
@@ -24,7 +24,7 @@
 #' @importFrom rlang sym
 #' @examples
 
-plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA, samples = 'all',
+plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA, samples_plot = 'all',
                           sample_column = 'sample_id', include_creosote = F) {
   quo_sample_column <- sym(sample_column)
   if (plot_type == 'boxplot') {
@@ -53,14 +53,15 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
   } else if (plot_type == 'profile') {
     pro_dat <- profile_dat[[1]]
 
-    if (samples == 'all') {
+    if (samples_plot == 'all') {
       # calculate sample means and sds if samples == 'all'
       sample_pro_dat <- group_by(pro_dat, Compound) %>%
         summarize(mean_prop_conc = mean(prop_conc),
                   sd_prop_conc = sd(prop_conc)) %>%
         rename(sample_prop_conc = mean_prop_conc)
     } else {
-      samples_prop_dat <- filter(pro_dat, quo_sample_column == samples)
+      sample_pro_dat <- filter(pro_dat, quo_sample_column %in% samples_plot) %>%
+        rename(sample_prop_conc = prop_conc)
     }
     sources <- select(pro_dat, Compound, source, source_prop_conc) %>%
       rename(prop_conc = source_prop_conc, profile = source) %>%
@@ -73,23 +74,46 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
       # from creosote profiles
       sources <- filter(sources, Compound != 'benzo[e]pyrene')
     }
-    profiles <- left_join(sources, sample_pro_dat) %>%
+    profiles_all <- left_join(sources, sample_pro_dat) %>%
       left_join(distinct(pro_dat[,c('Compound', 'molwt')]))
 
     if (!('all' %in% sources_plot)){
-      profiles <- filter(profiles, profile %in% sources_plot)
+      profiles_all <- filter(profiles_all, profile %in% sources_plot)
+    }
+    if (samples_plot == 'all') {
+      p <- ggplot(profiles_all, aes(x = reorder(Compound, molwt))) +
+        geom_point(alpha = 0.7, aes(y = prop_conc)) +
+        geom_line(aes(y = prop_conc, group = profile)) +
+        geom_point(aes(x = reorder(Compound, molwt), y = sample_prop_conc), color = '#e41a1c', alpha = 0.8) +
+        geom_errorbar(aes(ymin = sample_prop_conc-sd_prop_conc, ymax = sample_prop_conc+sd_prop_conc),
+                      color = '#e41a1c', alpha = 0.7) +
+        geom_line(aes(y = sample_prop_conc, group = 1), color = '#e41a1c') +
+        facet_wrap(~profile, scales = 'free_y') +
+        theme_bw() +
+        labs(x = "", y = "Proportional Concentration") +
+        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, vjust = 1, hjust = 1),
+              axis.text.y = element_text(size = rel(1.3)),
+              axis.title.y = element_text(size = rel(1.4)),
+              strip.text = element_text(size = rel(1.4)),
+              panel.grid.minor.y = element_blank())
+    } else {
+      p <- ggplot(profiles_all, aes(x = reorder(Compound, molwt))) +
+        geom_point(alpha = 0.7, aes(y = prop_conc)) +
+        geom_line(aes(y = prop_conc, group = profile)) +
+        geom_point(aes(x = reorder(Compound, molwt), y = sample_prop_conc),
+                   color = '#e41a1c', alpha = 0.8) +
+        geom_line(aes(y = sample_prop_conc, group = 1), color = '#e41a1c') +
+        facet_wrap(~profile, scales = 'free_y') +
+        theme_bw() +
+        labs(x = "", y = "Proportional Concentration") +
+        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, vjust = 1, hjust = 1),
+              axis.text.y = element_text(size = rel(1.3)),
+              axis.title.y = element_text(size = rel(1.4)),
+              strip.text = element_text(size = rel(1.4)),
+              panel.grid.minor.y = element_blank())
     }
 
-    p <- ggplot(profiles, aes(x = reorder(Compound, molwt), y = prop_conc)) +
-      geom_point(alpha = 0.7) +
-      geom_point(aes(x = reorder(Compound, molwt), y = sample_prop_conc), color = '#3182BD', alpha = 0.8) +
-      geom_errorbar(aes(ymin = sample_prop_conc-sd_prop_conc, ymax = sample_prop_conc+sd_prop_conc),
-                    color = '#3182BD', alpha = 0.7) +
-      facet_wrap(~profile, scales = 'free_y') +
-      theme_bw() +
-      labs(x = "", y = "Proportional Concentration") +
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-            panel.grid.minor.y = element_blank())
+
   } else {
     warning('plot_type does not equal "boxplot" or "profile"')
   }

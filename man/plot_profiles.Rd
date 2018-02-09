@@ -5,7 +5,7 @@
 \title{plot_profiles}
 \usage{
 plot_profiles(profile_dat, plot_type = "boxplot", sources_plot = NA,
-  samples = "all", sample_column = "sample_id", include_creosote = F)
+  samples_plot = "all", sample_column = "sample_id", include_creosote = F)
 }
 \arguments{
 \item{profile_dat}{The output of `pah_profiler` which includes the proportional concentration
@@ -18,7 +18,7 @@ by source, or various profile ('profile') plots.}
 \item{sources_plot}{If `plot_type` = `profile`, include a vector of sources that you want to include
 in a profile plot to compare to samples. Set equal to "all" to include paneled plots of all source profiles.}
 
-\item{samples}{If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
+\item{samples_plot}{If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
 Can either be a single unique ID or "all" to indicate taking the mean and standard deviation of all samples.}
 
 \item{sample_column}{Column that contains unique sample IDs.}
