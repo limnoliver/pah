@@ -72,8 +72,8 @@ calc_ratio_dist <- function(ratio_dat) {
               top_diff3 = ifelse(anyNA(rank3), NA, length(which(rank3 %in% 1))))
 
   by.sources.rank.counts$n_poss <- (3-rowSums(is.na(by.sources.rank.counts)))*length(unique(ranks$sample))
-  by.sources.rank.counts$n_prop <- (rowSums(by.sources.rank.counts[,c('top_diff1', 'top_diff2', 'top_diff3')], na.rm = T)/by.sources.rank.counts$n_poss)*100
-  by.sources.rank.counts <- filter(by.sources.rank.counts, !is.na(n_prop))
+  by.sources.rank.counts$percent_top <- (rowSums(by.sources.rank.counts[,c('top_diff1', 'top_diff2', 'top_diff3')], na.rm = T)/by.sources.rank.counts$n_poss)*100
+  by.sources.rank.counts <- filter(by.sources.rank.counts, !is.na(percent_top))
 
 
   # calculate the mean the distances and ranks for each source
@@ -95,9 +95,6 @@ calc_ratio_dist <- function(ratio_dat) {
     summarize(top_source1 = source[which.min(diff1)],
               top_source2 = source[which.min(diff2)],
               top_source3 = source[which.min(diff3)])
-
-  top.sources <- by.sources$source[by.sources$n_prop > 5]
-  top.sources <- na.omit(top_sources)
 
   return_dat <- list(ranks, mean.sources, top.sources)
   names(return_dat) <- c('raw', 'source', 'sample')
