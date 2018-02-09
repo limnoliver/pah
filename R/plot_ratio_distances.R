@@ -26,10 +26,9 @@
 #' given sample. A proportion rather than a raw count is given because not all sources were in each double
 #' ratio comparison. The bars are colored by the number of source to sample distances that were calculated for
 #' that source.
-#' @importFrom dplyr filter
+#' @import dplyr
+#' @importFrom tidyr gather
 #' @import ggplot2
-#' @importFrom ggrepel geom_text_repel
-#' @importFrom gridExtra grid.arrange
 #' @examples
 
 plot_ratios <- function(ratio_dist_dat, plot_type = "source-mean", percent_cutoff = 5, sample_order = NA) {
@@ -120,12 +119,15 @@ plot_ratios <- function(ratio_dist_dat, plot_type = "source-mean", percent_cutof
       by.samples.long$sample <- as.factor(by.samples.long$sample)
       by.samples.long$sample <- factor(by.samples.long$sample, levels = sample_order)
     }
+    color.vals <- c(source_ratios$colors, 'gray')
+    names(color.vals) <- c(source_ratios$abbrev, 'other')
 
     p <- ggplot(by.samples.long, aes(x = comparison, y = sample)) +
       geom_tile(aes(fill = top_var_cat), color = 'white') +
-      scale_fill_manual(values = c('#8c510a', '#bf812d', '#c51b7d',
-                                   '#01665e', '#35978f', 'gray', '#b2182b'),
+      scale_fill_manual(values = color.vals,
                         name = "Source") +
       labs(x = "", y = "")
+
+    return(p)
   }
 }
