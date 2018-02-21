@@ -82,7 +82,7 @@ plot_ratio_dist <- function(ratio_dist_dat, plot_type = "source-mean",
   } else if (plot_type == "source-top") {
     mean.sources <- ratio_dist_dat$source
 
-    p <- ggplot(mean.sources, aes(x = reorder(source, n_prop), y = n_prop)) +
+    p <- ggplot(mean.sources, aes(x = reorder(source, percent_top), y = percent_top)) +
       geom_bar(stat = 'identity', aes(fill = factor(n_poss))) +
       scale_fill_brewer(palette = 'Dark2', type = 'qual', name = 'Number of Comparisons') +
       labs(x = 'Sources', y = 'Percent Times Top Source in\nDouble Ratio Comparisons') +
