@@ -57,7 +57,7 @@ plot_ratio_dist <- function(ratio_dist_dat, plot_type = "source-mean",
     mean.sources.long$source <- factor(mean.sources.long$source, levels = order.sources[[1]])
 
     mean.sources.long <- filter(mean.sources.long, double_ratio != "sample")
-
+    mean.sources.long <- droplevels(mean.sources.long)
     mean.sources.long$double_ratio <- as.factor(mean.sources.long$double_ratio)
     levels(mean.sources.long$double_ratio) <- c('BaA/(BaA+Ch) : IndPy/(IndPy+BghiP)',
                                                 'FluA/(FluA+Pyr) : Anth/(Anth+Phen)',
