@@ -83,6 +83,13 @@ plot_ratio_dist <- function(ratio_dist_dat, plot_type = "source-mean",
     mean.sources <- ratio_dist_dat$source
     mean.sources <- filter(mean.sources, !is.na(percent_top))
 
+    # add a very small value to 0's so that you can see the color of the box
+    # for those sources that never were the top source
+    # e.g., maybe they weren't ever the top source because they were only in a single
+    # double ratio comparison
+
+    mean.sources <- mutate(mean.sources, percent_top = ifelse(percent_top == 0, 0.1, percent_top))
+
     p <- ggplot(mean.sources, aes(x = reorder(source, percent_top), y = percent_top)) +
       geom_bar(stat = 'identity', aes(fill = factor(n_poss))) +
       scale_fill_brewer(palette = 'Dark2', type = 'qual', name = 'Number of Comparisons') +
