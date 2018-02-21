@@ -81,6 +81,7 @@ plot_ratio_dist <- function(ratio_dist_dat, plot_type = "source-mean",
 
   } else if (plot_type == "source-top") {
     mean.sources <- ratio_dist_dat$source
+    mean.sources <- filter(mean.sources, !is.na(percent_top))
 
     p <- ggplot(mean.sources, aes(x = reorder(source, percent_top), y = percent_top)) +
       geom_bar(stat = 'identity', aes(fill = factor(n_poss))) +
