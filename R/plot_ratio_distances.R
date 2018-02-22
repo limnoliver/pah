@@ -120,17 +120,16 @@ plot_ratio_dist <- function(ratio_dist_dat, plot_type = "source-mean",
       gather(key = comparison, value = top_var, -sample) %>%
       mutate(top_var_cat = ifelse(top_var %in% top_sources, top_var, 'other'))
 
-    if (!is.na(sample_order)) {
-      if (length(sample_order) != nrow(by.samples)) {
-        warning("sample_order length does not match the number of unique sample IDs")
-      }
-      if (!all(by.samples$sample %in% sample_order)) {
-        warning("some sample IDs missing from sample_order")
-      }
-
-      by.samples.long$sample <- as.factor(by.samples.long$sample)
-      by.samples.long$sample <- factor(by.samples.long$sample, levels = sample_order)
+    if (length(sample_order) != nrow(by.samples)) {
+      warning("sample_order length does not match the number of unique sample IDs")
     }
+    if (!all(by.samples$sample %in% sample_order)) {
+      warning("some sample IDs missing from sample_order")
+    }
+
+    by.samples.long$sample <- as.factor(by.samples.long$sample)
+    by.samples.long$sample <- factor(by.samples.long$sample, levels = sample_order)
+
     color.vals <- c(source_ratios$colors, 'gray')
     names(color.vals) <- c(source_ratios$abbrev, 'other')
 
