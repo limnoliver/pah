@@ -60,7 +60,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
                   sd_prop_conc = sd(prop_conc)) %>%
         rename(sample_prop_conc = mean_prop_conc)
     } else {
-      sample_pro_dat <- filter(pro_dat, quo_sample_column %in% samples_plot) %>%
+      sample_pro_dat <- filter(pro_dat, (!!quo_sample_column) %in% samples_plot) %>%
         rename(sample_prop_conc = prop_conc)
     }
     sources <- select(pro_dat, Compound, source, source_prop_conc) %>%
