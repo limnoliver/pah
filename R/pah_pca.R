@@ -22,7 +22,7 @@
 #' source-sample compindations, and the euclidean distance between the source and sample in the PCA
 #' components space.
 #' @import dplyr
-#' @importFrom tidyr spread
+#' @importFrom tidyr spread drop_na
 #' @importFrom stats prcomp
 #' @examples
 
