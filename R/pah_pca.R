@@ -15,7 +15,12 @@
 #' comparisons if include_creosote = T. It is recommended that users first include creosote
 #' to determine if it is an important source. If it is not important (determined by using TRUE),
 #' then proceed using analyses that do not include creosote profiles.
-#' @return A data frame that contains
+#' @return A list of three data frames. "pca_dat" contains all PCA components that met the perc_cutoff,
+#' as well as a sample_id column and type which identifies whether the values correspond to a sample
+#' or source profile. "pca_summary" prints the standard deviation, proportion of variance, and cumulative
+#' proportion of variance exp0lained for all components of the PCA. "pca_distance" is a long data frame of all
+#' source-sample compindations, and the euclidean distance between the source and sample in the PCA
+#' components space.
 #' @import dplyr
 #' @importFrom tidyr spread
 #' @importFrom stats prcomp
@@ -76,7 +81,7 @@ pah_pca <- function(profiles, perc_cutoff = 10, include_creosote = T) {
   pca_out <- summary(pca)$importance
 
   # determine what dimensions the plotting space should be in
-  n_pca <- length(which(pca_out[2,] >= (percent_cutoff/100)))
+  n_pca <- length(which(pca_out[2,] >= (perc_cutoff/100)))
   if (n_pca == 1) {
     n_pca <- 2
   } else {
@@ -136,7 +141,7 @@ pah_pca <- function(profiles, perc_cutoff = 10, include_creosote = T) {
 
   # outputs
   sum_desc <- paste0("PCA components 1 through ", n_pca, " each explained more than the cutoff of ",
-                     percent_cutoff, "% of the total variance in the data and together explained ",
+                     perc_cutoff, "% of the total variance in the data and together explained ",
                      cum_variance, "% of the total variance.")
   message(sum_desc)
   out <- list(pca_plot_dat, pca_out, comp_diff)
