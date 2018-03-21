@@ -27,7 +27,6 @@
 
 pah_mw_parent <- function(compound_info, sample_column, conc_column, statistic = "average", plot = TRUE) {
   # make column names dplyr-ready
-  quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
   quo_sample_column <- sym(sample_column)
 
