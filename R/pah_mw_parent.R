@@ -32,13 +32,13 @@ pah_mw_parent <- function(compound_info, sample_column, conc_column, statistic =
 
   mw <- compound_info %>%
     filter(!is.na(molwt_highlow)) %>%
-    group_by(!!quo_compound_column, molwt_highlow) %>%
+    group_by(!!quo_sample_column, molwt_highlow) %>%
     summarize(totals = sum(!!quo_conc_column), means = mean(!!quo_conc_column), counts = n()) %>%
     rename(variable = molwt_highlow)
 
   parent <- compound_info %>%
     filter(!is.na(parentAlkyl)) %>%
-    group_by(!!quo_compound_column, parentAlkyl) %>%
+    group_by(!!quo_sample_column, parentAlkyl) %>%
     summarize(totals = sum(!!quo_conc_column), means = mean(!!quo_conc_column), counts = n()) %>%
     rename(variable = parentAlkyl)
 
@@ -53,7 +53,7 @@ pah_mw_parent <- function(compound_info, sample_column, conc_column, statistic =
 
   my_labels <- paste0(all.text$variable, " \nn = ", all.text$counts)
 
-  p <- ggplot(all, aes(x = variable, y = ifelse(statistic == "sum", totals, means))) +
+  p <- ggplot(all, aes_string(x = 'variable', y = ifelse(statistic == "sum", 'totals', 'means'))) +
     scale_y_continuous(trans = 'log10') +
     geom_boxplot() +
     theme_bw() +
@@ -61,6 +61,10 @@ pah_mw_parent <- function(compound_info, sample_column, conc_column, statistic =
     labs(x = "Compound Type", y = ifelse(statistic == "sum", "Sum Sample Concentration (ppb)", "Avg. Sample Concentration (ppb)")) +
     scale_x_discrete(labels = my_labels)
 
-  out <- ifelse(plot == T, p, all)
+  if (plot == T) {
+    out <- p
+  } else {
+    out <- all
+  }
   return(out)
 }
