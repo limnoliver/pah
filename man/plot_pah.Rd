@@ -6,7 +6,8 @@
 \usage{
 plot_pah(pah_dat, conc_column = "Value", sample_id_column = "Sample",
   compound_column = "Parameter", compound_plot = "Total PAH",
-  color_column = NA, group_column = NA, conc_units = "ppb")
+  color_column = NA, group_column = NA, order_column = NA,
+  conc_units = "ppb")
 }
 \arguments{
 \item{pah_dat}{dataframe with PAH concentrations. It is recommended that entire samples with censored observations
@@ -24,6 +25,13 @@ This function assumes these samples have already been removed.}
 \item{color_column}{a column with group variable by which to color code bars}
 
 \item{group_column}{a column by which to group and order the bars.}
+
+\item{order_column}{a column by which to order bars within groups. If left NA, this will default
+to the conc_column so bars are ordered low to high within groups or across all
+bars if no groups are given.}
+
+\item{conc_units}{character string, units for PAH concentration that will be used
+in labels on plots}
 }
 \description{
 Create a bar plot of PAH concentrations. The function allows you to group the data by one

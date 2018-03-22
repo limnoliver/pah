@@ -13,6 +13,11 @@
 #' @param compound_plot a vector of strings identifying which compounds from compound_column to include in the plot. If more than one compound is given, the plot will be faceted by compound.
 #' @param color_column a column with group variable by which to color code bars
 #' @param group_column a column by which to group and order the bars.
+#' @param order_column a column by which to order bars within groups. If left NA, this will default
+#' to the conc_column so bars are ordered low to high within groups or across all
+#' bars if no groups are given.
+#' @param conc_units character string, units for PAH concentration that will be used
+#' in labels on plots
 #' @import ggplot2
 #' @import dplyr
 #' @importFrom rlang .data
@@ -21,11 +26,15 @@
 #'
 plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample',
                      compound_column = 'Parameter', compound_plot = "Total PAH",
-                     color_column = NA, group_column = NA, conc_units = "ppb") {
+                     color_column = NA, group_column = NA, order_column = NA, conc_units = "ppb") {
+
   quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
   quo_sample_id_column <- sym(sample_id_column)
   quo_group_column <- sym(group_column)
+
+  order_column <- ifelse(is.na(order_column), conc_column, order_column)
+  quo_order_column <- sym(order_column)
 
   pah_dat_temp <- filter(pah_dat, (!!quo_compound_column) %in% compound_plot)
 
@@ -39,7 +48,7 @@ plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample'
 
   if (anyNA(group_column)) {
     # plotting if there is no grouping column given
-    p <- ggplot(pah_dat_temp, aes_string(x = paste0('reorder(',sample_id_column,',', conc_column,')'), y = conc_column)) +
+    p <- ggplot(pah_dat_temp, aes_string(x = paste0('reorder(',sample_id_column,',', order_column,')'), y = conc_column)) +
       geom_bar(stat="identity", position="identity", colour="black") +
       barchart_theme +
       labs(x = "", y = paste0("Concentration (", conc_units, ")"))
@@ -72,7 +81,7 @@ plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample'
       select(!!quo_group_column, !!quo_compound_column, thresholdPEC, thresholdTEC) %>%
       distinct()
 
-    p <- ggplot(pah_dat_temp, aes_string(x = paste0('reorder(',sample_id_column,',',conc_column,")"), y = conc_column)) +
+    p <- ggplot(pah_dat_temp, aes_string(x = paste0('reorder(',sample_id_column,',',order_column,")"), y = conc_column)) +
       geom_bar(stat = 'identity', width = 0.8, position = position_dodge(width = 2), colour="black" ) +
       # need to test this: does this work of PARAM_SYNYNOYM is one variable?
       geom_hline(data = dummy.dat, aes(yintercept = thresholdPEC)) +
