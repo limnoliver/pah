@@ -39,7 +39,7 @@ calc_tox_thresholds <- function(compound_info, sample_column, conc_column, compo
   tec <- ifelse(conc_unit == 'ppb', 1610, 1.610)
   pec <- ifelse(conc_unit == 'ppb', 22800, 22.8)
 
-  pec_tec <- filter(compound_info, which(EPApriority16 == TRUE)) %>%
+  pec_tec <- filter(compound_info, EPApriority16 %in% TRUE) %>%
     group_by(!!quo_sample_column) %>%
     summarize(sum_EPA16 = sum(!!quo_conc_column)) %>%
     mutate(tec_ratio = sum_EPA16/tec,
