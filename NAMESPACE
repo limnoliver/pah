@@ -2,6 +2,7 @@
 
 export(calc_ratio_dist)
 export(calc_ratios)
+export(calc_tox_thresholds)
 export(getPAH)
 export(get_compound_info)
 export(pah_mw_parent)
