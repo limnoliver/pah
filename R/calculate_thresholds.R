@@ -46,19 +46,26 @@ calc_tox_thresholds <- function(compound_info, sample_column, conc_column, compo
            pec_ratio = sum_EPA16/pec) %>%
     select(!!quo_sample_column, sum_EPA16, tec_ratio, pec_ratio)
 
-  toc_dat <- filter(compound_info, !!quo_compound_column == "TOC") %>%
+  toc_dat <- filter(compound_info, (!!quo_compound_column) == "TOC") %>%
     mutate(f_TOC = (!!quo_conc_column)/100) %>%
     select(!!quo_sample_column, f_TOC)
 
   esbtu_dat <- filter(compound_info, !is.na(coc_pah_fcv)) %>%
-    left_join(toc_dat, by = !!quo_sample_column) %>%
-    mutate(conc_ug_g = ifelse(conc_unit == 'ppb', round((!!quo_conc_column)/f_TOC, 0)/1000, round((!!quo_conc_column)/f_TOC, 0))) %>%
-    mutate(esbtu = conc_ug_g/coc_pah_fcv) %>%
+    left_join(toc_dat, by = sample_column)
+
+  #coc_pah_fcv are in ppm, so need to get to that unit before dividing
+  if (conc_unit == 'ppb') {
+    esbtu_dat <- mutate(esbtu_dat, conc_ug_g = ((!!quo_conc_column)/f_TOC)/1000)
+  } else {
+    esbtu_dat <- mutate(esbtu_dat, conc_ug_g = (!!quo_conc_column)/f_TOC)
+  }
+
+  esbtu_dat <- mutate(esbtu_dat, esbtu = conc_ug_g/coc_pah_fcv) %>%
     group_by(!!quo_sample_column) %>%
     summarize(n_esbtu = n(),
-              sum_esbtu = sum(esbtu, na.rm = T))
+              sum_esbtu = round(sum(esbtu, na.rm = T), 2))
 
-  site_results <- left_join(pec_tec, esbtu_dat, by = !!quo_sample_column)
+  site_results <- left_join(pec_tec, esbtu_dat, by = sample_column)
 
   site_results_summary <- data.frame(unique_id = c("TEC", 'PEC', 'ESBTU'),
                                      mean_EPApriority16_conc = rep(mean(site_results$sum_EPA16), 3),
