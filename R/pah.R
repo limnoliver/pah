@@ -69,4 +69,24 @@
 #' head(source_ratios)
 "source_ratios"
 
+#' PAH source concentrations
+#'
+#' A table of various PAH sources and the concentration of PAHs measured in each source. Most source
+#' PAH concentrations are the EPA 16 priority compounds, but some concentrations are a sum of more than
+#' 16 compounds. These can be used to rule out various sources by comparing to sample concentrations; e.g.,
+#' if source concentrations are less than sample concentrations, that source by definition cannot be the
+#' primary source of contamination. These concentrations have been extracted from a number of published
+#' papers.
+#'
+#' @format A data frame with 36 observations of 9 variables:
+#' \describe{
+#'   \item{source}{Brief description of the source material.}
+#'   \item{reference}{Citation for paper from which concentration was extracted.}
+#'   \item{units}{Unit if source concentration.}
+#'   \item{conc_mgkg}{Measured concentration.}
+#'   \item{PAHs_used}{The number of PAH compounds that were summed to calculate concentration.}
+#'   }
+#' @examples
+#' head(source_conc)
+"source_conc"
 
