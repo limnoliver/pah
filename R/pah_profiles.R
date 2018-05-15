@@ -12,10 +12,11 @@
 #' CAS registration number ('casrn'), or compound name ('Compound').
 #' @param sources a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
-#' @return Returns two data frames. The first is a long dataframe where observations are repeated for each sample/compound combination. Adds to the input
-#' dataframe all columns in `source_profiles`, as well as the chi-squared difference between source and sample, and the proportional
-#' concentrations. The second dataframe is a long data frame where observations are repeated for
-#' each sample/source combination, and the chi2 value is summed across all compounds to create a distance
+#' @return Returns two data frames. The first (profiles) is a long dataframe where observations are repeated for
+#' each sample/compound/source combination, and reports the proportional concentration of that unique compound/sample combination,
+#' and chi-squared distance between the source and sample. Additionally, the function adds
+#' all columns in `source_profiles`.  The second dataframe is a long data frame where observations are repeated for
+#' each unique sample/source combination, and the chi2 value is summed across all compounds to create a distance
 #' metric between each sample and source profile.
 #' @import dplyr
 #' @importFrom tidyr gather
