@@ -90,3 +90,18 @@
 #' head(source_conc)
 "source_conc"
 
+#' PAH source names
+#'
+#' A table of various PAH sources, shortened and abbreviated names, as well as source categories
+#' to clean up plotting or to group compounds.
+#'
+#' @format A data frame with 52 observations of 4 variables:
+#' \describe{
+#'   \item{source_subcategory}{Coarse categories that describe the origin of the source (e.g., coal combustion)}
+#'   \item{source_name}{Long name of source}
+#'   \item{source_short_name}{Shortened name of source}
+#'   \item{source_abbrev}{An abbreviated source name for plotting purposes, as well as merging with other sources tables.}
+#'   }
+#' @examples
+#' head(sources)
+"sources"
