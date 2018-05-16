@@ -75,7 +75,7 @@ calc_tox_thresholds <- function(compound_info, sample_column, conc_column, compo
 
   site_results_summary <- data.frame(unique_id = c("TEC", 'PEC', 'ESBTU', 'TOC'),
                                      mean_EPApriority16_conc = rep(mean(site_results$sum_EPA16), 4),
-                                     n_sites = rep(nrow(site_results), 4),
+                                     n_sites = c(length(which(!is.na(test$results_bysample$tec_ratio))), length(which(!is.na(test$results_bysample$pec_ratio))), length(which(!is.na(test$results_bysample$sum_esbtu_ratio))), length(which(!is.na(test$results_bysample$perc_toc)))),
                                      mean = c(mean(site_results$tec_ratio, na.rm = T), mean(site_results$pec_ratio, na.rm = T), mean(site_results$sum_esbtu, na.rm = T), mean(site_results$perc_toc, na.rm = T)),
                                      median = c(median(site_results$tec_ratio, na.rm = T), median(site_results$pec_ratio, na.rm = T), median(site_results$sum_esbtu, na.rm = T), median(site_results$perc_toc, na.rm = T)),
                                      sd = c(sd(site_results$tec_ratio, na.rm = T), sd(site_results$pec_ratio, na.rm = T), sd(site_results$sum_esbtu, na.rm = T), sd(site_results$perc_toc, na.rm = T)),
