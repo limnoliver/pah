@@ -63,24 +63,24 @@ calc_tox_thresholds <- function(compound_info, sample_column, conc_column, compo
   esbtu_dat <- mutate(esbtu_dat, esbtu = conc_ug_g/coc_pah_fcv) %>%
     group_by(!!quo_sample_column) %>%
     summarize(n_esbtu = n(),
-              sum_esbtu = round(sum(esbtu, na.rm = T), 2))
+              sum_esbtu = round(sum(esbtu, na.rm = F), 2))
 
   site_results <- left_join(pec_tec, esbtu_dat, by = sample_column)
 
   perc_toc <- filter(compound_info, (!!quo_compound_column) == "TOC") %>%
     select(!!quo_sample_column, !!quo_conc_column) %>%
-    rename(perc_TOC = !!quo_conc_column)
+    rename(perc_toc = !!quo_conc_column)
 
   site_results <- left_join(site_results, perc_toc)
 
   site_results_summary <- data.frame(unique_id = c("TEC", 'PEC', 'ESBTU', 'TOC'),
                                      mean_EPApriority16_conc = rep(mean(site_results$sum_EPA16), 4),
                                      n_sites = rep(nrow(site_results), 4),
-                                     mean = c(mean(site_results$tec_ratio), mean(site_results$pec_ratio), mean(site_results$sum_esbtu), mean(site_results$perc_toc)),
-                                     median = c(median(site_results$tec_ratio), median(site_results$pec_ratio), median(site_results$sum_esbtu), median(site_results$perc_toc)),
-                                     sd = c(sd(site_results$tec_ratio), sd(site_results$pec_ratio), sd(site_results$sum_esbtu), sd(site_results$perc_toc)),
-                                     min = c(min(site_results$tec_ratio), min(site_results$pec_ratio), min(site_results$sum_esbtu), min(site_results$perc_toc)),
-                                     max = c(max(site_results$tec_ratio), max(site_results$pec_ratio), max(site_results$sum_esbtu), max(site_results$perc_toc)))
+                                     mean = c(mean(site_results$tec_ratio, na.rm = T), mean(site_results$pec_ratio, na.rm = T), mean(site_results$sum_esbtu, na.rm = T), mean(site_results$perc_toc, na.rm = T)),
+                                     median = c(median(site_results$tec_ratio, na.rm = T), median(site_results$pec_ratio, na.rm = T), median(site_results$sum_esbtu, na.rm = T), median(site_results$perc_toc, na.rm = T)),
+                                     sd = c(sd(site_results$tec_ratio, na.rm = T), sd(site_results$pec_ratio, na.rm = T), sd(site_results$sum_esbtu, na.rm = T), sd(site_results$perc_toc, na.rm = T)),
+                                     min = c(min(site_results$tec_ratio, na.rm = T), min(site_results$pec_ratio, na.rm = T), min(site_results$sum_esbtu, na.rm = T), min(site_results$perc_toc, na.rm = T)),
+                                     max = c(max(site_results$tec_ratio, na.rm = T), max(site_results$pec_ratio, na.rm = T), max(site_results$sum_esbtu, na.rm = T), max(site_results$perc_toc, na.rm = T)))
 
   out <- list(site_results, site_results_summary)
   names(out) <- c('results_bysample', 'results_summary')
