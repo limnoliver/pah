@@ -24,8 +24,8 @@ with units of percent TOC.}
 either "ppb" (ug/kg) or "ppm" (mg/kg).}
 }
 \value{
-a list of two dataframes. 'results_bysite' reports sample-specific thresholds, while
-'results_summary' reports summary statistics of thresholds across all samples.
+a list of two dataframes. 'results_bysite' reports sample-specific thresholds and percent TOC, while
+'results_summary' reports summary statistics of thresholds and TOC across all samples.
 }
 \description{
 Summarizes PAH concentrations relative to toxicity thresholds including
