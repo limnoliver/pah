@@ -16,15 +16,17 @@ as well as compound-specific information, including low versus high molecular we
 
 \item{conc_column}{string, column that contains sample concentrations}
 
-\item{statistic}{string, either "sum" or "average". For each sample, compounds in each category
-(low vs. high, parent vs. alkyl) are summed. Because different analyses may measure a different number
+\item{statistic}{string, either "sum" or "average". If statistic = "sum", compounds are summed by sample and
+category (low vs. high, parent vs. alkyl for each sample). Because different analyses may measure a different number
 of chemicals or focus on different types of chemicals, these numbers are hard to interpret both within
-and across studies. The raw sums can be reported ("sum") along with the number of compounds in each category.
-Alternatively, the average concentration of compounds in each category ("average") as a way to standardize
-the number of compounds across categories. If plot = FALSE, both are calculated and exported. If plot = TRUE,
+and across studies. The raw sums are reported ("sum") along with the number of compounds in each category.
+Alternatively, the average concentration of compounds in each category ("average") is a way to standardize
+the number of compounds across categories. If plot = FALSE, both statistics  are calculated and exported
+in the first table in the list ("all_dat"), but only the chosen statistic is summarized and exported in
+the second table that summarizes HMW:LMW and parent:alkyl for each sample ("summarized_dat"). If plot = TRUE,
 only the statistic of choice is plotted.}
 
-\item{plot}{logical, whether the statistic should be exported as a dataframe (FALSE) or
+\item{plot}{logical, whether the data should be exported as two dataframes within a list (FALSE) or
 plotted as a boxplot (TRUE).}
 }
 \description{

@@ -11,14 +11,16 @@
 #' (column "molwt_highlow") and parent versus alkylated (column "parentAlkyl").
 #' @param sample_column string, column that contains unique sample identifier
 #' @param conc_column string, column that contains sample concentrations
-#' @param statistic string, either "sum" or "average". For each sample, compounds in each category
-#' (low vs. high, parent vs. alkyl) are summed. Because different analyses may measure a different number
+#' @param statistic string, either "sum" or "average". If statistic = "sum", compounds are summed by sample and
+#' category (low vs. high, parent vs. alkyl for each sample). Because different analyses may measure a different number
 #' of chemicals or focus on different types of chemicals, these numbers are hard to interpret both within
-#' and across studies. The raw sums can be reported ("sum") along with the number of compounds in each category.
-#' Alternatively, the average concentration of compounds in each category ("average") as a way to standardize
-#' the number of compounds across categories. If plot = FALSE, both are calculated and exported. If plot = TRUE,
+#' and across studies. The raw sums are reported ("sum") along with the number of compounds in each category.
+#' Alternatively, the average concentration of compounds in each category ("average") is a way to standardize
+#' the number of compounds across categories. If plot = FALSE, both statistics  are calculated and exported
+#' in the first table in the list ("all_dat"), but only the chosen statistic is summarized and exported in
+#' the second table that summarizes HMW:LMW and parent:alkyl for each sample ("summarized_dat"). If plot = TRUE,
 #' only the statistic of choice is plotted.
-#' @param plot logical, whether the statistic should be exported as a dataframe (FALSE) or
+#' @param plot logical, whether the data should be exported as two dataframes within a list (FALSE) or
 #' plotted as a boxplot (TRUE).
 #' @import ggplot2
 #' @import dplyr
@@ -61,10 +63,17 @@ pah_mw_parent <- function(compound_info, sample_column, conc_column, statistic =
     labs(x = "Compound Type", y = ifelse(statistic == "sum", "Sum Sample Concentration (ppb)", "Avg. Sample Concentration (ppb)")) +
     scale_x_discrete(labels = my_labels)
 
+  # create sample-specific parent:alkyl and hmw:lmw variables
+  all.wide <- select(all, -counts) %>%
+    select_(ifelse(statistic == "sum", "-means", "-totals")) %>%
+    spread(key = variable, value = ifelse(statistic == "sum", totals, means)) %>%
+    mutate(parent_alkyl = parent/alkyl, HMW_LMW = HMW/LMW)
+
   if (plot == T) {
     out <- p
   } else {
-    out <- all
+    out <- list(all, all.wide)
+    names(out) <- c("all_dat", "summarized_dat")
   }
   return(out)
 }
