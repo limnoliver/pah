@@ -6,7 +6,7 @@
 \usage{
 pah_profiler(pah_dat, compound_column = "casrn",
   sample_column = "sample_id", conc_column = "RESULT",
-  sources = source_profiles)
+  source_profs = source_profiles)
 }
 \arguments{
 \item{pah_dat}{dataframe with PAH concentrations, where there is one column of compounds, and each sample
@@ -16,7 +16,7 @@ the average values.}
 \item{compound_column}{column name which will be used to merge with source profiles. This can be a USGS pcode ('pcode'),
 CAS registration number ('casrn'), or compound name ('Compound').}
 
-\item{sources}{a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
+\item{source_profs}{a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.}
 }
 \value{
