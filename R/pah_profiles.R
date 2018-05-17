@@ -10,7 +10,7 @@
 #' the average values.
 #' @param compound_column column name which will be used to merge with source profiles. This can be a USGS pcode ('pcode'),
 #' CAS registration number ('casrn'), or compound name ('Compound').
-#' @param sources a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
+#' @param source_profs a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
 #' @return Returns two data frames. The first (profiles) is a long dataframe where observations are repeated for
 #' each sample/compound/source combination, and reports the proportional concentration of that unique compound/sample combination,
@@ -24,14 +24,14 @@
 #' @examples
 
 pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column = 'sample_id',
-                         conc_column = 'RESULT', sources = source_profiles) {
+                         conc_column = 'RESULT', source_profs = source_profiles) {
   # make column names dplyr-ready
   quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
   quo_sample_column <- sym(sample_column)
 
   # pull out all 12 compounds
-  profile_compounds <- select(sources, !!quo_compound_column)
+  profile_compounds <- select(source_profs, !!quo_compound_column)
 
   # filter user samples to include only those in the source profiles
   samp.prof <- filter(pah_dat, (!!quo_compound_column) %in% profile_compounds[[1]])
@@ -44,7 +44,7 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column = 'sa
     mutate(prop_conc = (!!quo_conc_column)/total_pah)
 
   # merge in source compound info
-  all.profs <- full_join(samp.prof, sources, by = compound_column) %>%
+  all.profs <- full_join(samp.prof, source_profs, by = compound_column) %>%
     select(-RESULT) %>%
     gather(key = source, value = source_prop_conc, -(1:8), -Compound, -Abbreviation, -pcode, -molwt)
 
