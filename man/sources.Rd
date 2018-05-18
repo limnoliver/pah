@@ -9,6 +9,7 @@
   \item{source_subcategory}{Coarse categories that describe the origin of the source (e.g., coal combustion)}
   \item{source_name}{Long name of source}
   \item{source_short_name}{Shortened name of source}
+  \item{source_short_no_ref}{Shortened name of source, without references.}
   \item{source_abbrev}{An abbreviated source name for plotting purposes, as well as merging with other sources tables.}
   }}
 \usage{
