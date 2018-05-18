@@ -15,7 +15,7 @@ sample/source combination. These are combined in a list.}
 \item{plot_type}{The desired plot type. This can either be a boxplot ('boxplot') of all distance measures
 by source, or various profile ('profile') plots.}
 
-\item{sources_plot}{If `plot_type` = `profile`, include a vector of sources that you want to include
+\item{sources_plot}{If `plot_type` = `profile`, include a vector of abbreviated sources that you want to include
 in a profile plot to compare to samples. Set equal to "all" to include paneled plots of all source profiles.}
 
 \item{samples_plot}{If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.

@@ -10,7 +10,7 @@
 #' sample/source combination. These are combined in a list.
 #' @param plot_type The desired plot type. This can either be a boxplot ('boxplot') of all distance measures
 #' by source, or various profile ('profile') plots.
-#' @param sources_plot If `plot_type` = `profile`, include a vector of sources that you want to include
+#' @param sources_plot If `plot_type` = `profile`, include a vector of abbreviated sources that you want to include
 #' in a profile plot to compare to samples. Set equal to "all" to include paneled plots of all source profiles.
 #' @param sample_column Column that contains unique sample IDs.
 #' @param samples_plot If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
@@ -47,7 +47,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
     p <- ggplot(sum_chi2, aes(x = source, y = sum_chi2)) +
       geom_boxplot() +
       theme_bw() +
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 8))) +
       labs(x = '', y = 'Sum Chi2')
 
   } else if (plot_type == 'profile') {
@@ -63,18 +63,18 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
       sample_pro_dat <- filter(pro_dat, (!!quo_sample_column) %in% samples_plot) %>%
         rename(sample_prop_conc = prop_conc)
     }
-    sources <- select(pro_dat, Compound, source, source_prop_conc) %>%
+    sources_dat <- select(pro_dat, Compound, source, source_prop_conc) %>%
       rename(prop_conc = source_prop_conc, profile = source) %>%
       distinct()
 
     if (include_creosote == F) {
-      sources <- filter(sources, !(profile %in% c('Creosote_railway_ties', 'Creosote_product')))
+      sources_dat <- filter(sources_dat, !(profile %in% c('Creosote_railway_ties', 'Creosote_product')))
     } else {
       # if user wants to keep creosote source profiles, then drop compound that is missing
       # from creosote profiles
-      sources <- filter(sources, Compound != 'benzo[e]pyrene')
+      sources_dat <- filter(sources_dat, Compound != 'benzo[e]pyrene')
     }
-    profiles_all <- left_join(sources, sample_pro_dat) %>%
+    profiles_all <- left_join(sources_dat, sample_pro_dat) %>%
       left_join(distinct(pro_dat[,c('Compound', 'molwt')]))
 
     if (!('all' %in% sources_plot)){
@@ -91,7 +91,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
         facet_wrap(~profile, scales = 'free_y') +
         theme_bw() +
         labs(x = "", y = "Proportional Concentration") +
-        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, vjust = 1, hjust = 1),
+        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, hjust = 1, margin = margin(t = 8)),
               axis.text.y = element_text(size = rel(1.3)),
               axis.title.y = element_text(size = rel(1.4)),
               strip.text = element_text(size = rel(1.4)),
@@ -106,7 +106,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
         facet_wrap(~profile, scales = 'free_y') +
         theme_bw() +
         labs(x = "", y = "Proportional Concentration") +
-        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, vjust = 1, hjust = 1),
+        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, margin = margin(t = 8), hjust = 1),
               axis.text.y = element_text(size = rel(1.3)),
               axis.title.y = element_text(size = rel(1.4)),
               strip.text = element_text(size = rel(1.4)),
