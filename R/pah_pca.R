@@ -10,11 +10,6 @@
 #' @param perc_cutoff The threshold for keeping PCA components in subsequent analyses; all
 #' individual components that explain greater than or equal to this cutoff of the total
 #' variance in the dataset will be kept in the analysis.
-#' @param include_creosote Logical, whether to include the source profiles for creosote (n = 2). The source profiles
-#' for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
-#' comparisons if include_creosote = T. It is recommended that users first include creosote
-#' to determine if it is an important source. If it is not important (determined by using TRUE),
-#' then proceed using analyses that do not include creosote profiles.
 #' @return A list of three data frames. "pca_dat" contains all PCA components that met the perc_cutoff,
 #' as well as a sample_id column and type which identifies whether the values correspond to a sample
 #' or source profile. "pca_summary" prints the standard deviation, proportion of variance, and cumulative
@@ -26,7 +21,7 @@
 #' @importFrom stats prcomp
 #' @examples
 
-pah_pca <- function(profiles, perc_cutoff = 10, include_creosote = T) {
+pah_pca <- function(profiles, perc_cutoff = 10) {
 
   # subset list that comesout of pah_profiles
   all_profiles <- profiles$profiles
@@ -57,14 +52,6 @@ pah_pca <- function(profiles, perc_cutoff = 10, include_creosote = T) {
   # put together
   profiles_t <- rbind(source_profiles_t, sample_profiles_t)
   profiles_t$sample_id <- row.names(profiles_t)
-
-  # drop missing compound (BeP) for creosoite of include_creosote = T
-
-  if (include_creosote == T) {
-    profiles_t <- select(profiles_t, -BeP)
-  } else if (include_creosote == F) {
-    profiles_t <- drop_na(profiles_t)
-  }
 
   # drop any rows (samples) with 0 values (BDL)
   profiles_t <- filter_all(profiles_t, all_vars(. != 0))

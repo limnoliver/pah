@@ -12,6 +12,10 @@
 #' CAS registration number ('casrn'), or compound name ('Compound').
 #' @param source_profs a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
+#' @param include_creosote Logical, whether to include the source profiles for creosote (n = 2). The source profiles
+#' for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
+#' comparisons if include_creosote = T. It is recommended that users first conduct analysis with creosote to determine
+#' if creosote is an important source. If not, continue analysis without the creosote sources using the 12-compound profiles.
 #' @return Returns two data frames. The first (profiles) is a long dataframe where observations are repeated for
 #' each sample/compound/source combination, and reports the proportional concentration of that unique compound/sample combination,
 #' and chi-squared distance between the source and sample. Additionally, the function adds
@@ -24,17 +28,25 @@
 #' @examples
 
 pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
-                         conc_column, source_profs = source_profiles) {
+                         conc_column, source_profs = source_profiles, include_creosote = T) {
   # make column names dplyr-ready
   quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
   quo_sample_column <- sym(sample_column)
 
   # pull out all 12 compounds
-  profile_compounds <- select(source_profs, !!quo_compound_column)
+  # filter to 11 compounds if using creosote
+
+  if (include_creosote == T) {
+    profile_compounds <- filter(source_profs, Abbreviation != 'BeP') %>%
+      select(!!quo_compound_column)
+  } else {
+    profile_compounds <- select(source_profs, !!quo_compound_column)
+  }
 
   # filter user samples to include only those in the source profiles
   samp.prof <- filter(pah_dat, (!!quo_compound_column) %in% profile_compounds[[1]])
+
 
   # group by sample - calculate sum total and whether or not there are any samples = 0
   samp.prof.bysample <- group_by(samp.prof, !!quo_sample_column) %>%
