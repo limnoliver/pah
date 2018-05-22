@@ -4,8 +4,7 @@
 \alias{pah_profiler}
 \title{pah_profiler}
 \usage{
-pah_profiler(pah_dat, compound_column = "casrn",
-  sample_column = "sample_id", conc_column = "RESULT",
+pah_profiler(pah_dat, compound_column = "casrn", sample_column, conc_column,
   source_profs = source_profiles)
 }
 \arguments{

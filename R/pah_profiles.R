@@ -23,8 +23,8 @@
 #' @importFrom rlang sym
 #' @examples
 
-pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column = 'sample_id',
-                         conc_column = 'RESULT', source_profs = source_profiles) {
+pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
+                         conc_column, source_profs = source_profiles) {
   # make column names dplyr-ready
   quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
@@ -52,7 +52,7 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column = 'sa
   all.profs <- mutate(all.profs, chi2 = (abs(prop_conc - source_prop_conc)^2)/((prop_conc + source_prop_conc)/2))
 
   # sum over the sources by sample
-  all.summary <- group_by(all.profs, sample_id, source) %>%
+  all.summary <- group_by(all.profs, !!quo_sample_column, source) %>%
     summarize(sum_chi2 = sum(chi2))
 
   out <- list(all.profs, all.summary)
