@@ -15,23 +15,17 @@
 #' @param sample_column Column that contains unique sample IDs.
 #' @param samples_plot If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
 #' Can either be a single unique ID or "all" to indicate taking the mean and standard deviation of all samples.
-#' @param include_creosote Logical, whether to include the source profiles for creosote (n = 2). The source profiles
-#' for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
-#' comparisons. Users should create plots both ways to determine if creosote is an important source. If it is
-#' not important (determined by using TRUE), then proceed using plots that ignore creosote profiles.
 #' @import ggplot2
 #' @import dplyr
 #' @importFrom rlang sym
 #' @examples
 
 plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA, samples_plot = 'all',
-                          sample_column = 'sample_id', include_creosote = F) {
+                          sample_column = 'sample_id') {
   quo_sample_column <- sym(sample_column)
   if (plot_type == 'boxplot') {
-    if (include_creosote == F) {
-      # find and filter out sources = creosote
-      creosote <- unique(grep('creosote', profile_dat[[2]]$source, ignore.case = T, value = T))
-      sum_chi2 <- filter(profile_dat[[2]], !(source %in% creosote))
+
+      sum_chi2 <- profile_dat[[2]]
 
       order.vals <- sum_chi2 %>%
         group_by(source) %>%
@@ -40,9 +34,6 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
 
       sum_chi2$source <- factor(sum_chi2$source, levels = order.vals$source)
 
-    } else {
-      sum_chi2 <- profile_dat[[2]]
-    }
     # create boxplot
     p <- ggplot(sum_chi2, aes(x = source, y = sum_chi2)) +
       geom_boxplot() +
@@ -67,13 +58,6 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
       rename(prop_conc = source_prop_conc, profile = source) %>%
       distinct()
 
-    if (include_creosote == F) {
-      sources_dat <- filter(sources_dat, !(profile %in% c('Creosote_railway_ties', 'Creosote_product')))
-    } else {
-      # if user wants to keep creosote source profiles, then drop compound that is missing
-      # from creosote profiles
-      sources_dat <- filter(sources_dat, Compound != 'benzo[e]pyrene')
-    }
     profiles_all <- left_join(sources_dat, sample_pro_dat) %>%
       left_join(distinct(pro_dat[,c('Compound', 'molwt')]))
 

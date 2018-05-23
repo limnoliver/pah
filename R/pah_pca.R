@@ -13,7 +13,7 @@
 #' @return A list of three data frames. "pca_dat" contains all PCA components that met the perc_cutoff,
 #' as well as a sample_id column and type which identifies whether the values correspond to a sample
 #' or source profile. "pca_summary" prints the standard deviation, proportion of variance, and cumulative
-#' proportion of variance exp0lained for all components of the PCA. "pca_distance" is a long data frame of all
+#' proportion of variance explained for all components of the PCA. "pca_distance" is a long data frame of all
 #' source-sample compindations, and the euclidean distance between the source and sample in the PCA
 #' components space.
 #' @import dplyr

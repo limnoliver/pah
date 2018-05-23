@@ -5,7 +5,7 @@
 \title{plot_profiles}
 \usage{
 plot_profiles(profile_dat, plot_type = "boxplot", sources_plot = NA,
-  samples_plot = "all", sample_column = "sample_id", include_creosote = F)
+  samples_plot = "all", sample_column = "sample_id")
 }
 \arguments{
 \item{profile_dat}{The output of `pah_profiler` which includes the proportional concentration
@@ -22,11 +22,6 @@ in a profile plot to compare to samples. Set equal to "all" to include paneled p
 Can either be a single unique ID or "all" to indicate taking the mean and standard deviation of all samples.}
 
 \item{sample_column}{Column that contains unique sample IDs.}
-
-\item{include_creosote}{Logical, whether to include the source profiles for creosote (n = 2). The source profiles
-for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
-comparisons. Users should create plots both ways to determine if creosote is an important source. If it is
-not important (determined by using TRUE), then proceed using plots that ignore creosote profiles.}
 }
 \description{
 Creates common figures from the calculated distance between sample and source profiles.
