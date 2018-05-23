@@ -40,10 +40,29 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
   # filter to 11 compounds if using creosote
 
   if (include_creosote == T) {
+
     profile_compounds <- filter(source_profs, Abbreviation != 'BeP') %>%
       select(!!quo_compound_column)
 
-    source_profs <- filter(source_profs, Abbreviation != 'BeP')
+    # because other proportions were calculated based on 12 compounds,
+    # need to adjust for the proportion that is made up of BeP (the
+    # compound being dropped)
+    BeP_prop <- filter(source_profs, Abbreviation == 'BeP') %>%
+      select(PPLT:CTD7)
+
+    BeP_prop <- as.numeric(BeP_prop[1,])
+
+    prop_fixed <- filter(source_profs, Abbreviation != 'BeP') %>%
+      select(PPLT:CTD7)
+
+    prop_fixed <- data.frame(t(round(t(prop_fixed)/(1-BeP_prop), 3)))
+
+    prop_rest <- filter(source_profs, Abbreviation != 'BeP') %>%
+      select(-(PPLT:CTD7)) %>%
+      bind_cols(prop_fixed) %>%
+      select(Compound, Abbreviation, pcode, PPLT:CTD7, CRE2, CRE4, casrn, molwt)
+
+    source_profs <- prop_rest
   } else {
     profile_compounds <- select(source_profs, !!quo_compound_column)
     source_profs <- select(source_profs, -CRE2, -CRE4)
