@@ -38,7 +38,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
     p <- ggplot(sum_chi2, aes(x = source, y = sum_chi2)) +
       geom_boxplot() +
       theme_bw() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 6))) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 0))) +
       labs(x = '', y = 'Sum Chi2')
 
   } else if (plot_type == 'profile') {
@@ -75,7 +75,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
         facet_wrap(~profile, scales = 'free_y') +
         theme_bw() +
         labs(x = "", y = "Proportional Concentration") +
-        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, hjust = 1, margin = margin(t = 6)),
+        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, hjust = 1, margin = margin(t = 0)),
               axis.text.y = element_text(size = rel(1.3)),
               axis.title.y = element_text(size = rel(1.4)),
               strip.text = element_text(size = rel(1.4)),
@@ -90,7 +90,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
         facet_wrap(~profile, scales = 'free_y') +
         theme_bw() +
         labs(x = "", y = "Proportional Concentration") +
-        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, margin = margin(t = 6), hjust = 1),
+        theme(axis.text.x = element_text(size = rel(1.3), angle = 45, margin = margin(t = 0), hjust = 1),
               axis.text.y = element_text(size = rel(1.3)),
               axis.title.y = element_text(size = rel(1.4)),
               strip.text = element_text(size = rel(1.4)),
