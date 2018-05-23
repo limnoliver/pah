@@ -42,6 +42,8 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
   if (include_creosote == T) {
     profile_compounds <- filter(source_profs, Abbreviation != 'BeP') %>%
       select(!!quo_compound_column)
+
+    source_profs <- filter(source_profs, Abbreviation != 'BeP')
   } else {
     profile_compounds <- select(source_profs, !!quo_compound_column)
     source_profs <- select(source_profs, -CRE2, -CRE4)
