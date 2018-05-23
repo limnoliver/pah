@@ -10,6 +10,8 @@
 #' the average values.
 #' @param compound_column column name which will be used to merge with source profiles. This can be a USGS pcode ('pcode'),
 #' CAS registration number ('casrn'), or compound name ('Compound').
+#' @param sample_column column name of unique sample identifier
+#' @param conc_column column name of reported concentrations
 #' @param source_profs a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
 #' @param include_creosote Logical, whether to include the source profiles for creosote (n = 2). The source profiles
@@ -46,7 +48,9 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
   }
 
   # filter user samples to include only those in the source profiles
-  samp.prof <- filter(pah_dat, (!!quo_compound_column) %in% profile_compounds[[1]])
+  # only include necessary columns
+  samp.prof <- filter(pah_dat, (!!quo_compound_column) %in% profile_compounds[[1]]) %>%
+    select(!!quo_sample_column, !!quo_compound_column, !!quo_conc_column)
 
 
   # group by sample - calculate sum total and whether or not there are any samples = 0
@@ -58,8 +62,8 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
 
   # merge in source compound info
   all.profs <- full_join(samp.prof, source_profs, by = compound_column) %>%
-    select(-RESULT) %>%
-    gather(key = source, value = source_prop_conc, -(1:8), -Compound, -Abbreviation, -pcode, -molwt)
+    select(-!!quo_conc_column) %>%
+    gather(key = source, value = source_prop_conc, -!!quo_sample_column, -casrn, -total_pah, -prop_conc, -Compound, -Abbreviation, -pcode)
 
   # calculate the chi squared difference
   all.profs <- mutate(all.profs, chi2 = (abs(prop_conc - source_prop_conc)^2)/((prop_conc + source_prop_conc)/2))
