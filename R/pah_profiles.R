@@ -63,7 +63,7 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
   # merge in source compound info
   all.profs <- full_join(samp.prof, source_profs, by = compound_column) %>%
     select(-!!quo_conc_column) %>%
-    gather(key = source, value = source_prop_conc, -!!quo_sample_column, -casrn, -total_pah, -prop_conc, -Compound, -Abbreviation, -pcode)
+    gather(key = source, value = source_prop_conc, -!!quo_sample_column, -casrn, -total_pah, -prop_conc, -Compound, -Abbreviation, -pcode, -molwt)
 
   # calculate the chi squared difference
   all.profs <- mutate(all.profs, chi2 = (abs(prop_conc - source_prop_conc)^2)/((prop_conc + source_prop_conc)/2))
