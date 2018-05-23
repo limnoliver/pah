@@ -10,6 +10,7 @@
 #' @param perc_cutoff The threshold for keeping PCA components in subsequent analyses; all
 #' individual components that explain greater than or equal to this cutoff of the total
 #' variance in the dataset will be kept in the analysis.
+#' @param sample_column column name of unique sample identifier
 #' @return A list of three data frames. "pca_dat" contains all PCA components that met the perc_cutoff,
 #' as well as a sample_id column and type which identifies whether the values correspond to a sample
 #' or source profile. "pca_summary" prints the standard deviation, proportion of variance, and cumulative
@@ -21,45 +22,51 @@
 #' @importFrom stats prcomp
 #' @examples
 
-pah_pca <- function(profiles, perc_cutoff = 10) {
+pah_pca <- function(profiles, perc_cutoff = 10, sample_column) {
+
+  quo_sample_column <- sym(sample_column)
 
   # subset list that comesout of pah_profiles
   all_profiles <- profiles$profiles
 
   # get sample profiles transposed and ready for pca
-  sample_profiles_t <- select(all_profiles, sample_id, Abbreviation, prop_conc) %>%
+  sample_profiles_t <- select(all_profiles, !!quo_sample_column, Abbreviation, prop_conc) %>%
     distinct() %>%
     spread(key = Abbreviation, value = prop_conc)
 
   sample_profiles_t <- as.data.frame(sample_profiles_t)
-  row.names(sample_profiles_t) <- sample_profiles_t$sample_id
-  sample_profiles_t <- select(sample_profiles_t, -sample_id)
+  #row.names(sample_profiles_t) <- sample_profiles_t$sample_id
+  #sample_profiles_t <- select(sample_profiles_t, -!!quo_sample_column)
 
   sample_profiles_t$type <- 'sample'
 
   # get source profiles tansposed and ready for pca
   source_profiles_t <- select(all_profiles, source, Abbreviation, source_prop_conc) %>%
     distinct() %>%
-    rename(sample_id = source, prop_conc = source_prop_conc) %>%
-    spread(key = Abbreviation, value = prop_conc)
+    rename(prop_conc = source_prop_conc)
 
-  source_profiles_t <- as.data.frame(source_profiles_t)
-  row.names(source_profiles_t) <- source_profiles_t$sample_id
-  source_profiles_t <- select(source_profiles_t, -sample_id)
+  names(source_profiles_t)[names(source_profiles_t) %in% 'source'] <- sample_column
+
+  source_profiles_t <- spread(source_profiles_t, key = Abbreviation, value = prop_conc)
+
+  #source_profiles_t <- as.data.frame(source_profiles_t)
+  #row.names(source_profiles_t) <- source_profiles_t[, sample_column]
+  #source_profiles_t <- select(source_profiles_t, -!!quo_sample_column)
 
   source_profiles_t$type <- 'source'
 
   # put together
   profiles_t <- rbind(source_profiles_t, sample_profiles_t)
-  profiles_t$sample_id <- row.names(profiles_t)
+  #profiles_t[,sample_column] <- row.names(profiles_t)
 
   # drop any rows (samples) with 0 values (BDL)
   profiles_t <- filter_all(profiles_t, all_vars(. != 0))
 
-  sample_id <- profiles_t$sample_id
+  sample_id <- profiles_t[, sample_column]
+  sample_id <- sample_id[[1]]
   type <- profiles_t$type
-
-  profiles_t <- select(profiles_t, -type, -sample_id)
+  #
+  profiles_t <- select(profiles_t, -type, -!!quo_sample_column)
   profiles_t <- data.frame(profiles_t)
   row.names(profiles_t) <- sample_id
 
@@ -79,17 +86,17 @@ pah_pca <- function(profiles, perc_cutoff = 10) {
 
   # get data in format to be used with ggplot
   pca_plot_dat <- data.frame(pca$x[,1:n_pca])
-  pca_plot_dat$sample_id <- row.names(pca_plot_dat)
+  pca_plot_dat[, sample_column] <- row.names(pca_plot_dat)
   pca_plot_dat$type <- type
 
   # now calculate euclidean distances
-  structure1 <- select(pca_plot_dat, sample_id, type) %>%
+  structure1 <- select(pca_plot_dat, !!quo_sample_column, type) %>%
     filter(type == 'sample') %>%
-    select(sample_id)
+    select(!!quo_sample_column)
 
-  structure2 <- select(pca_plot_dat, sample_id, type) %>%
+  structure2 <- select(pca_plot_dat, !!quo_sample_column, type) %>%
     filter(type == 'source') %>%
-    select(sample_id)
+    select(!!quo_sample_column)
 
   structure <- expand.grid(structure1[[1]], structure2[[1]])
 
@@ -97,14 +104,14 @@ pah_pca <- function(profiles, perc_cutoff = 10) {
 
   # left join by sample ids and rename columns
   comp <- rename(structure, sample = Var1, source = Var2) %>%
-    left_join(pca_plot_dat_sub, by = c('sample' = 'sample_id'))
+    left_join(pca_plot_dat_sub, by = c('sample' = sample_column))
 
   sample_colnames <- paste0('PC', 1:n_pca, '_sam')
   names(comp)[3:(2+n_pca)] <- sample_colnames
 
   #left join by source ids and rename colums
   comp <- comp %>%
-    left_join(pca_plot_dat_sub, by = c('source' = 'sample_id'))
+    left_join(pca_plot_dat_sub, by = c('source' = sample_column))
 
   source_colnames <- paste0('PC', 1:n_pca, '_src')
   names(comp)[(3+n_pca):ncol(comp)] <- source_colnames

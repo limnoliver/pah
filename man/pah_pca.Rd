@@ -4,7 +4,7 @@
 \alias{pah_pca}
 \title{pah_pca}
 \usage{
-pah_pca(profiles, perc_cutoff = 10)
+pah_pca(profiles, perc_cutoff = 10, sample_column)
 }
 \arguments{
 \item{profiles}{The output of pah_profiles, which contains PAH profile data for both source and samples.
@@ -13,6 +13,8 @@ The reported values are proportional concentrations for each compound.}
 \item{perc_cutoff}{The threshold for keeping PCA components in subsequent analyses; all
 individual components that explain greater than or equal to this cutoff of the total
 variance in the dataset will be kept in the analysis.}
+
+\item{sample_column}{column name of unique sample identifier}
 }
 \value{
 A list of three data frames. "pca_dat" contains all PCA components that met the perc_cutoff,
