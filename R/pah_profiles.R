@@ -42,6 +42,7 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
       select(!!quo_compound_column)
   } else {
     profile_compounds <- select(source_profs, !!quo_compound_column)
+    source_profs <- select(source_profs, -CRE2, -CRE4)
   }
 
   # filter user samples to include only those in the source profiles
