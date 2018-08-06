@@ -2,7 +2,7 @@
 # ignore this on build, but push to github
 library(dplyr)
 
-dat <- read.csv('tempstorage/pahCompoundInfoGLRI.csv', na.strings = c("NA", ""))
+dat <- read.csv('tempstorage/pahCompoundInfoGLRI.csv', na.strings = c("NA", ""), stringsAsFactors = FALSE)
 dat$Parameter.code <- as.character(dat$Parameter.code)
 names(dat)
 
