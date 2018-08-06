@@ -1,0 +1,89 @@
+pcode,Parameter code,schedule,Parameter,Abbreviation,EPApriority16,Macdonald_SQG,VM_sourceprofiles,TEC,PEC,Ingersoll_09_included,Coc.pah.fcv,Coc.pah.max,epa.emap,parentAlkyl,molwt_highlow,molwt,benzeneRings,sourceProfile12,creosoteProfile11
+p64095,64095,5507,"1,2,4-trichlorobenzene",,,,,,,,,,,,LMW,181.4,,,
+p64097,64097,5507,"1,2-dimethylnaphthalene",,,,,,,,,,,,LMW,156.2,,,
+p64099,64099,5507,"1,6-dimethylnaphthalene",,,,,,,,,,,,LMW,156.2,,,
+p64100,64100,5507,1-methyl-9h-fluorene,,,,,,,,612,49700,0,,LMW,180.2,,,
+p64101,64101,5507,1-methylphenanthrene,,,,,,,,670,24100,0,,LMW,192.3,3,,
+p64102,64102,5507,1-methylpyrene,,,,,,,,,,,,HMW,216.2,,,
+p64103,64103,5507,"2,3,6-trimethylnaphthalene",,,,,,,,,,,,LMW,170.2,,,
+p63167,63167,5507,"2,6-dimethylnaphthalene",,,,,,,,513,33800,0,,LMW,156.2,,,
+p64104,64104,5507,2-ethylnaphthalene,,,,,,,,509,129900,0,,LMW,156.2,,,
+p90754,90754,5507,2-fluorobiphenyl (surrogate),,,,,,,,,,,,,,,,
+p64105,64105,5507,2-methylanthracene,,,,,,,,667,2420,0,,LMW,192.3,3,,
+p64106,64106,5507,"4,5-methylenephenanthrene",,,,,,,,,,,,LMW,190.2,,,
+p64107,64107,5507,fluorene,Flu,TRUE,TRUE,,77.4,536,1,538,26000,1,,LMW,166.2,2,,x
+p64108,64108,5507,acenaphthene,Ace,TRUE,,,,,1,491,33400,1,,LMW,154.2,2,,
+p64109,64109,5507,acenaphthylene,Acen,TRUE,,,,,1,452,24000,1,,LMW,152.2,2,,x
+p63180,63180,5507,anthracene,Anth,TRUE,TRUE,TRUE,57.2,845,1,594,1300,1,parent,LMW,178.2,3,x,x
+p63181,63181,5507,anthraquinone,,,,,,,,,,,,HMW,208.2,,,
+p63610,63610,5507,benz[a]anthracene,BaA,TRUE,TRUE,TRUE,108,1050,1,841,4153,1,parent,HMW,228.3,4,x,x
+p63183,63183,5507,benzo[a]pyrene,BaP,TRUE,TRUE,TRUE,150,1450,1,965,3840,1,,HMW,252.3,5,x,x
+p64111,64111,5507,benzo[b]fluoranthene,BbF,TRUE,,TRUE,,,,979,2169,1,,HMW,252.3,4,x,x
+p64112,64112,5507,benzo[e]pyrene,BeP,,,TRUE,,,,967,4300,1,,HMW,252.3,5,x,
+p64113,64113,5507,"benzo[g,h,i]perylene",BghiP,TRUE,,TRUE,,,,1095,648,1,,HMW,276.4,6,x,
+p64114,64114,5507,benzo[k]fluoranthene,BkF,TRUE,,TRUE,,,,981,1220,1,,HMW,252.3,,x,
+p63187,63187,5507,bis(2-ethylhexyl) phthalate,,,,,,,,,,,,HMW,390.5,,,
+p64137,64137,5507,c1-alkylated benz[a]anthracene/chrysene,,,,,,,,929,,1,alkyl,HMW,,,,
+p64142,64142,5507,c1-alkylated benzopyrene/perylene,,,,,,,,,,,,HMW,,,,
+p64132,64132,5507,c1-alkylated fluoranthene/pyrene,,,,,,,,770,,1,alkyl,HMW,,,,
+p64122,64122,5507,c1-alkylated naphthalene,,,,,,,,444,,1,alkyl,LMW,,,,
+p64127,64127,5507,c1-alkylated phenanthrene/anthracene,,,,,,,,670,,1,alkyl,LMW,,,,
+,,,c1-alkylated fluorene,,,,,,,,,,,alkyl,LMW,,,,
+p64138,64138,5507,c2-alkylated benz[a]anthracene/chrysene,,,,,,,,1008,,1,alkyl,HMW,,,,
+p64143,64143,5507,c2-alkylated benzopyrene/perylene,,,,,,,,,,,,HMW,,,,
+p64133,64133,5507,c2-alkylated fluoranthene/pyrene,,,,,,,,,,,alkyl,HMW,,,,
+p64123,64123,5507,c2-alkylated naphthalene,,,,,,,,510,,1,alkyl,LMW,,,,
+p64128,64128,5507,c2-alkylated phenanthrene/anthracene,,,,,,,,746,,1,alkyl,LMW,,,,
+,,,c2-alkylated fluorene,,,,,,,,,,,alkyl,LMW,,,,
+p64139,64139,5507,c3-alkylated benz[a]anthracene/chrysene,,,,,,,,1112,,1,alkyl,HMW,,,,
+p64144,64144,5507,c3-alkylated benzopyrene/perylene,,,,,,,,,,,,HMW,,,,
+p64134,64134,5507,c3-alkylated fluoranthene/pyrene,,,,,,,,949,,0,alkyl,HMW,,,,
+p64124,64124,5507,c3-alkylated naphthalene,,,,,,,,581,,1,alkyl,LMW,,,,
+p64129,64129,5507,c3-alkylated phenanthrene/anthracene,,,,,,,,829,,1,alkyl,LMW,,,,
+,,,c3-alkylated fluorene,,,,,,,,,,,alkyl,LMW,,,,
+p64140,64140,5507,c4-alkylated benz[a]anthracene/chrysene,,,,,,,,1214,,1,alkyl,HMW,,,,
+p64145,64145,5507,c4-alkylated benzopyrene/perylene,,,,,,,,,,,,HMW,,,,
+p64135,64135,5507,c4-alkylated fluoranthene/pyrene,,,,,,,,,,,,HMW,,,,
+p64125,64125,5507,c4-alkylated naphthalene,,,,,,,,657,,1,alkyl,LMW,,,,
+p64130,64130,5507,c4-alkylated phenanthrene/anthracene,,,,,,,,913,,1,alkyl,LMW,,,,
+p64141,64141,5507,c5-alkylated benz[a]anthracene/chrysene,,,,,,,,,,,,HMW,,,,
+p64146,64146,5507,c5-alkylated benzopyrene/perylene,,,,,,,,,,,,HMW,,,,
+p64136,64136,5507,c5-alkylated fluoranthene/pyrene,,,,,,,,,,,,HMW,,,,
+p64126,64126,5507,c5-alkylated naphthalene,,,,,,,,,,,,LMW,,,,
+p64131,64131,5507,c5-alkylated phenanthrene/anthracene,,,,,,,,,,,,LMW,,,,
+p63194,63194,5507,carbazole,,,,,,,,,,,,LMW,167.2,,,
+p64115,64115,5507,chrysene,Ch,TRUE,TRUE,TRUE,166,1290,1,844,826,1,parent,HMW,228.3,4,x,x
+p64116,64116,5507,"dibenz[a,h]anthracene",,TRUE,TRUE,,33,,1,1123,2389,1,,HMW,278.3,5,,
+p64117,64117,5507,dibenzothiophene,,,,,,,,,,,,LMW,184.3,3,,
+p63202,63202,5507,diethyl phthalate,,,,,,,,,,,,HMW,222.2,?,,
+p63208,63208,5507,fluoranthene,FluA,TRUE,TRUE,TRUE,423,2230,1,707,23870,1,parent,HMW,202.3,3,x,x
+p63631,63631,5507,hexachlorobenzene,,,,,,,,,,,,HMW,284.8,,,
+p64118,64118,5507,"indeno[1,2,3-cd]pyrene",IndPy,TRUE,,TRUE,,,,1115,,1,,HMW,276.3,5,x,
+p63220,63220,5507,naphthalene,Naph,TRUE,TRUE,,176,561,1,385,61700,1,parent,LMW,128.2,2,,x
+p90755,90755,5507,nitrobenzene-d5 (surrogate),,,,,,,,,,,,,,,,
+p64119,64119,5507,pentachloroanisole,,,,,,,,,,,,HMW,280.4,,,
+p63650,63650,5507,pentachloronitrobenzene,,,,,,,,,,,,HMW,295.3,,,
+p64120,64120,5507,perylene,,,,,,,,967,431,1,,HMW,252.3,5,,
+p63224,63224,5507,phenanthrene,Phen,TRUE,TRUE,TRUE,204,1170,1,596,34300,1,parent,LMW,178.2,3,x,x
+p64121,64121,5507,phenanthridine,,,,,,,,,,,,LMW,179.2,,,
+p63227,63227,5507,pyrene,Pyr,TRUE,TRUE,TRUE,195,1520,1,697,9090,1,parent,HMW,202.1,4,x,x
+p91107,91107,5507,sample weight,,,,,,,,,,,,,,,,
+p90756,90756,5507,terphenyl-d14 (surrogate),,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,
+p34208,34208,SLOH,acenaphthene,Ace,TRUE,,,,,1,491,33400,1,,LMW,154.2,2,,
+p34203,34203,SLOH,acenaphthylene,Acen,TRUE,,,,,1,452,24000,1,,LMW,152.2,2,,x
+p34223,34223,SLOH,anthracene,Anth,TRUE,TRUE,TRUE,57.2,845,1,594,1300,1,,LMW,178.2,3,x,x
+p34529,34529,SLOH,benz[a]anthracene,BaA,TRUE,TRUE,TRUE,108,1050,1,841,4153,1,,HMW,228.3,4,x,x
+p34250,34250,SLOH,benzo[a]pyrene,BaP,TRUE,TRUE,TRUE,150,1450,1,965,3840,1,,HMW,252.3,5,x,x
+p62555,62555,SLOH,benzo[e]pyrene,BeP,,,TRUE,,,,967,4300,1,,HMW,252.3,5,x,
+p34524,34524,SLOH,"benzo[g,h,i]perylene",BghiP,TRUE,,TRUE,,,,1095,648,1,,HMW,276.4,6,x,
+p34245,34245,SLOH,benzo[k]fluoranthene,BkF,TRUE,,TRUE,,,,981,1220,1,,HMW,252.3,,x,
+p34323,34323,SLOH,chrysene,Ch,TRUE,TRUE,TRUE,166,1290,1,844,826,1,,HMW,228.3,4,x,x
+p34559,34559,SLOH,"dibenz[a,h]anthracene",,TRUE,TRUE,,33,,1,1123,2389,1,,HMW,278.3,5,,
+p34379,34379,SLOH,fluoranthene,FluA,TRUE,TRUE,TRUE,423,2230,1,707,23870,1,,HMW,202.3,3,x,x
+p34384,34384,SLOH,fluorene,Flu,TRUE,TRUE,,77.4,536,1,538,26000,1,parent,LMW,166.2,2,,x
+p34406,34406,SLOH,"indeno[1,2,3-cd]pyrene",IndPy,,,,,,,,,,,HMW,276.3,5,x,
+p34445,34445,SLOH,naphthalene,Naph,TRUE,TRUE,,176,561,1,385,61700,1,,LMW,128.2,2,,x
+p00687,687,SLOH,organic_carbon,,,,,,,,,,,,,,,,
+p34464,34464,SLOH,phenanthrene,Phe,TRUE,TRUE,TRUE,204,1170,1,596,34300,1,,LMW,178.2,3,x,x
+p34472,34472,SLOH,pyrene,Pyr,TRUE,TRUE,TRUE,195,1520,1,697,9090,1,,HMW,202.1,4,x,x
