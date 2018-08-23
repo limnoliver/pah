@@ -12,7 +12,7 @@ dat_c <- left_join(dat, dataRetrieval::parameterCdFile, by = c('Parameter.code' 
 dat_c <- filter(dat_c, !(schedule %in% 'SLOH'))
 
 dat_c <- select(dat_c, Parameter, parameter_nm, pcode = Parameter.code, casrn,
-                Abbreviation, parentAlkyl, molwt, molwt_highlow,
+                Abbreviation, molwt, molwt_highlow,
                 benzeneRings, EPApriority16, Macdonald_SQG, VM_sourceprofiles,
                 sourceProfile12, creosoteProfile11, Ingersoll_09_included,
                 TEC, PEC, coc_pah_max = Coc.pah.max, coc_pah_fcv = Coc.pah.fcv)
