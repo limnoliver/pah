@@ -9,11 +9,6 @@
 #' @param compound_info The output dataframe from `get_compound_info`, which contains sample concentrations
 #' as well as compound-specific information, including low versus high molecular weight
 #' (column "molwt_highlow").
-#' @param parent_compounds A vector of all parent compounds in analysis that have associated alkylated compounds. If two alkylated compounds
-#' can not be distinguished from each other (e.g., have the same molecular weight), and therefore the parents cannot be distinguished,
-#' all possible parents should be listed. These names should reflect the exact names that are in your compound_info table.
-#' @param alkylated_compounds A vector of all alkylated compounds in the analysis that are associated with the listed parents. These
-#' names should reflect the exact names that are in your compound_info table.
 #' @param sample_column string, column that contains unique sample identifier
 #' @param conc_column string, column that contains sample concentrations
 #' @param compound_column string, column that contains compound names.
@@ -28,6 +23,11 @@
 #' the second table that summarizes HMW:LMW for each sample ("summarized_dat"). If plot = TRUE,
 #' only the statistic of choice is plotted. The sum is always used for the parent:alkyl calculation, assuming
 #' the user has provided only parents that have corresponding alkyls, and vice versa.
+#' @param parent_compounds A vector of all parent compounds in analysis that have associated alkylated compounds. If two alkylated compounds
+#' can not be distinguished from each other (e.g., have the same molecular weight), and therefore the parents cannot be distinguished,
+#' all possible parents should be listed. These names should reflect the exact names that are in your compound_info table.
+#' @param alkylated_compounds A vector of all alkylated compounds in the analysis that are associated with the listed parents. These
+#' names should reflect the exact names that are in your compound_info table.
 #' @param plot logical, whether the data should be exported as two dataframes within a list (FALSE) or
 #' plotted as a boxplot (TRUE).
 #' @import ggplot2
@@ -35,7 +35,9 @@
 #' @importFrom rlang sym
 #' @examples
 
-pah_mw_parent <- function(compound_info, sample_column, conc_column, compound_column, statistic = "average", plot = TRUE) {
+pah_mw_parent <- function(compound_info, sample_column, conc_column,
+                          compound_column, statistic = "average",
+                          parent_compounds, alkylated_compounds, plot = TRUE) {
 
   # test to be sure column and compound names exist
   if (!sample_column %in% names(compound_info)) {

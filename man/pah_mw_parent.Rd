@@ -5,7 +5,7 @@
 \title{pah_mw_parent}
 \usage{
 pah_mw_parent(compound_info, sample_column, conc_column, compound_column,
-  statistic = "average", plot = TRUE)
+  statistic = "average", parent_compounds, alkylated_compounds, plot = TRUE)
 }
 \arguments{
 \item{compound_info}{The output dataframe from `get_compound_info`, which contains sample concentrations
@@ -30,15 +30,15 @@ the second table that summarizes HMW:LMW for each sample ("summarized_dat"). If 
 only the statistic of choice is plotted. The sum is always used for the parent:alkyl calculation, assuming
 the user has provided only parents that have corresponding alkyls, and vice versa.}
 
-\item{plot}{logical, whether the data should be exported as two dataframes within a list (FALSE) or
-plotted as a boxplot (TRUE).}
-
 \item{parent_compounds}{A vector of all parent compounds in analysis that have associated alkylated compounds. If two alkylated compounds
 can not be distinguished from each other (e.g., have the same molecular weight), and therefore the parents cannot be distinguished,
 all possible parents should be listed. These names should reflect the exact names that are in your compound_info table.}
 
 \item{alkylated_compounds}{A vector of all alkylated compounds in the analysis that are associated with the listed parents. These
 names should reflect the exact names that are in your compound_info table.}
+
+\item{plot}{logical, whether the data should be exported as two dataframes within a list (FALSE) or
+plotted as a boxplot (TRUE).}
 }
 \description{
 Summarizes compound characteristics, including low versus high molecular weight and
