@@ -4,30 +4,41 @@
 \alias{pah_mw_parent}
 \title{pah_mw_parent}
 \usage{
-pah_mw_parent(compound_info, sample_column, conc_column,
+pah_mw_parent(compound_info, sample_column, conc_column, compound_column,
   statistic = "average", plot = TRUE)
 }
 \arguments{
 \item{compound_info}{The output dataframe from `get_compound_info`, which contains sample concentrations
 as well as compound-specific information, including low versus high molecular weight
-(column "molwt_highlow") and parent versus alkylated (column "parentAlkyl").}
+(column "molwt_highlow").}
 
 \item{sample_column}{string, column that contains unique sample identifier}
 
 \item{conc_column}{string, column that contains sample concentrations}
 
-\item{statistic}{string, either "sum" or "average". If statistic = "sum", compounds are summed by sample and
-category (low vs. high, parent vs. alkyl for each sample). Because different analyses may measure a different number
+\item{compound_column}{string, column that contains compound names.}
+
+\item{statistic}{string, either "sum" or "average" which will apply to molecular weight ratios.
+If statistic = "sum", compounds in each category (low vs. high molecular weight) are summed by sample.
+Because different analyses may measure a different number
 of chemicals or focus on different types of chemicals, these numbers are hard to interpret both within
-and across studies. The raw sums are reported ("sum") along with the number of compounds in each category.
-Alternatively, the average concentration of compounds in each category ("average") is a way to standardize
-the number of compounds across categories. If plot = FALSE, both statistics  are calculated and exported
-in the first table in the list ("all_dat"), but only the chosen statistic is summarized and exported in
-the second table that summarizes HMW:LMW and parent:alkyl for each sample ("summarized_dat"). If plot = TRUE,
-only the statistic of choice is plotted.}
+and across studies. For example, the analysis may measure many more high versus low molecular weight compounds,
+skewing this ratio. Alternatively, the average concentration of compounds in each category ("average")
+is a way to standardize the number of compounds in each category. If plot = FALSE, both statistics  are calculated
+and exported in the first table in the list ("all_dat"), but only the chosen statistic is summarized and exported in
+the second table that summarizes HMW:LMW for each sample ("summarized_dat"). If plot = TRUE,
+only the statistic of choice is plotted. The sum is always used for the parent:alkyl calculation, assuming
+the user has provided only parents that have corresponding alkyls, and vice versa.}
 
 \item{plot}{logical, whether the data should be exported as two dataframes within a list (FALSE) or
 plotted as a boxplot (TRUE).}
+
+\item{parent_compounds}{A vector of all parent compounds in analysis that have associated alkylated compounds. If two alkylated compounds
+can not be distinguished from each other (e.g., have the same molecular weight), and therefore the parents cannot be distinguished,
+all possible parents should be listed. These names should reflect the exact names that are in your compound_info table.}
+
+\item{alkylated_compounds}{A vector of all alkylated compounds in the analysis that are associated with the listed parents. These
+names should reflect the exact names that are in your compound_info table.}
 }
 \description{
 Summarizes compound characteristics, including low versus high molecular weight and
