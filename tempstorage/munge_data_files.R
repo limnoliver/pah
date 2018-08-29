@@ -29,7 +29,11 @@ dat_c <- mutate(dat_c,
                 creosoteProfile11 = ifelse(creosoteProfile11 %in% 'x', TRUE, FALSE),
                 Ingersoll_09_included = ifelse(Ingersoll_09_included %in% 1, TRUE, FALSE))
 
-pah_compounds <- dat_c
+dat_c$coc_pah_fcv[dat_c$parameter_nm %in% 'c1-alkylated fluorene'] <- 611
+dat_c$coc_pah_fcv[dat_c$parameter_nm %in% 'c2-alkylated fluorene'] <- 686
+dat_c$coc_pah_fcv[dat_c$parameter_nm %in% 'c3-alkylated fluorene'] <- 769
+
+pah_compounds <- filter(dat_c, !is.na(Parameter))
 
 devtools::use_data(pah_compounds, overwrite = T)
 
