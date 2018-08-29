@@ -14,10 +14,11 @@
 #' @param conc_column column name of reported concentrations
 #' @param source_profs a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
-#' @param include_creosote Logical, whether to include the source profiles for creosote (n = 2). The source profiles
-#' for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
-#' comparisons if include_creosote = T. It is recommended that users first conduct analysis with creosote to determine
-#' if creosote is an important source. If not, continue analysis without the creosote sources using the 12-compound profiles.
+#' @param creosote string, Setting for how to handle the source profiles for creosote (n = 2). The source profiles
+#' for creosote only include 11 compounds (missing BeP). However, in published source profiles, BeP is almost always equal to BaP.
+#' Options for ways to handle these creosote profiles include 1) 'drop' to not include creosote profiles in the analysis,
+#' 2) 'raw' to include the creosote profiles but limit all profiles to the 11 compounds included in the creosote profiles,
+#' or 3) 'interpolated' to include the creosote profiles where BeP is set equal to BaP.
 #' @return Returns two data frames. The first (profiles) is a long dataframe where observations are repeated for
 #' each sample/compound/source combination, and reports the proportional concentration of that unique compound/sample combination,
 #' and chi-squared distance between the source and sample. Additionally, the function adds
@@ -30,7 +31,11 @@
 #' @examples
 
 pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
-                         conc_column, source_profs = source_profiles, include_creosote = T) {
+                         conc_column, source_profs = source_profiles, creosote = 'interpolated') {
+
+  if (!creosote %in% c('interpolated', 'raw', 'drop')) {
+    stop("Argument creosote should be set to 'interpolated', 'raw', or 'drop'.")
+  }
   # make column names dplyr-ready
   quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
@@ -38,8 +43,11 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
 
   # pull out all 12 compounds
   # filter to 11 compounds if using creosote
+  all_cols <- names(source_profs)
+  noncreosote_profiles <- all_cols[-which(all_cols %in% c('Compound', 'Abbreviation', 'pcode', 'molwt', 'casrn', 'CRE2', 'CRE4'))]
+  all_profiles <- all_cols[-which(all_cols %in% c('Compound', 'Abbreviation', 'pcode', 'molwt', 'casrn'))]
 
-  if (include_creosote == T) {
+  if (creosote == 'raw') {
 
     profile_compounds <- filter(source_profs, Abbreviation != 'BeP') %>%
       select(!!quo_compound_column)
@@ -48,25 +56,28 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
     # need to adjust for the proportion that is made up of BeP (the
     # compound being dropped)
     BeP_prop <- filter(source_profs, Abbreviation == 'BeP') %>%
-      select(PPLT:CTD7)
+      select(all_profiles)
 
     BeP_prop <- as.numeric(BeP_prop[1,])
 
     prop_fixed <- filter(source_profs, Abbreviation != 'BeP') %>%
-      select(PPLT:CTD7)
+      select(all_profiles)
 
     prop_fixed <- data.frame(t(round(t(prop_fixed)/(1-BeP_prop), 3)))
 
     prop_rest <- filter(source_profs, Abbreviation != 'BeP') %>%
-      select(-(PPLT:CTD7)) %>%
+      select(-(all_profiles)) %>%
       bind_cols(prop_fixed) %>%
-      select(Compound, Abbreviation, pcode, PPLT:CTD7, CRE2, CRE4, casrn, molwt)
+      select(Compound, Abbreviation, pcode, all_profiles, casrn, molwt)
 
     source_profs <- prop_rest
-  } else {
+
+  } else if (creosote == 'drop') {
     profile_compounds <- select(source_profs, !!quo_compound_column)
     source_profs <- select(source_profs, -CRE2, -CRE4)
+
   }
+
 
   # filter user samples to include only those in the source profiles
   # only include necessary columns

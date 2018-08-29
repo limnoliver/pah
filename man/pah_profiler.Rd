@@ -5,7 +5,7 @@
 \title{pah_profiler}
 \usage{
 pah_profiler(pah_dat, compound_column = "casrn", sample_column, conc_column,
-  source_profs = source_profiles, include_creosote = T)
+  source_profs = source_profiles, creosote = "interpolated")
 }
 \arguments{
 \item{pah_dat}{dataframe with PAH concentrations, where there is one column of compounds, and each sample
@@ -22,10 +22,11 @@ CAS registration number ('casrn'), or compound name ('Compound').}
 \item{source_profs}{a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.}
 
-\item{include_creosote}{Logical, whether to include the source profiles for creosote (n = 2). The source profiles
-for creosote only include 11 compounds, and the missing 12th compound will be dropped in all sample-source
-comparisons if include_creosote = T. It is recommended that users first conduct analysis with creosote to determine
-if creosote is an important source. If not, continue analysis without the creosote sources using the 12-compound profiles.}
+\item{creosote}{string, Setting for how to handle the source profiles for creosote (n = 2). The source profiles
+for creosote only include 11 compounds (missing BeP). However, in published source profiles, BeP is almost always equal to BaP.
+Options for ways to handle these creosote profiles include 1) 'drop' to not include creosote profiles in the analysis,
+2) 'raw' to include the creosote profiles but limit all profiles to the 11 compounds included in the creosote profiles,
+or 3) 'interpolated' to include the creosote profiles where BeP is set equal to BaP.}
 }
 \value{
 Returns two data frames. The first (profiles) is a long dataframe where observations are repeated for
