@@ -76,7 +76,7 @@ pah_profiler <- function(pah_dat, compound_column = 'casrn', sample_column,
     profile_compounds <- select(source_profs, !!quo_compound_column)
     source_profs <- select(source_profs, -CRE2, -CRE4)
 
-  } else if (creosote == 'interpolate') {
+  } else if (creosote == 'interpolated') {
     profile_compounds <- select(source_profs, !!quo_compound_column)
 
   }
