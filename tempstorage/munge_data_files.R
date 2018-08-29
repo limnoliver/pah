@@ -2,6 +2,9 @@
 # ignore this on build, but push to github
 library(dplyr)
 
+#########################
+# pah compound metadata
+#########################
 dat <- read.csv('tempstorage/pahCompoundInfoGLRI.csv', na.strings = c("NA", ""), stringsAsFactors = FALSE)
 dat$Parameter.code <- as.character(dat$Parameter.code)
 names(dat)
@@ -29,3 +32,48 @@ dat_c <- mutate(dat_c,
 pah_compounds <- dat_c
 
 devtools::use_data(pah_compounds, overwrite = T)
+
+
+#########################
+# pah source profiles
+#########################
+
+profiles <- read.csv('tempstorage/PAH source profiles_BaldwinEtAl2016_correctedUMO1_creosote.csv')
+
+profiles_clean <- rename(profiles, pcode = param_cd,
+                         PPLT = Power.plant.emissions,
+                         RESI = Residential.heating,
+                         CCB1 = Coal.average,
+                         COKE = Coke.oven.emissions,
+                         DVEM = Diesel.vehicle,
+                         GVEM = Gasoline.vehicle,
+                         TUN1 = Traffic.tunnel.air,
+                         VAVG = Vehicle.traffic.avg,
+                         UMO1 = Used.motor.oil.1,
+                         UMO2 = Used.motor.oil.2,
+                         PIN1 = Pine.combustion.1,
+                         PIN2 = Pine.combustion.2,
+                         OAKS = Oak.combustion,
+                         FOC1 = Fuel.oil.combustion,
+                         TIRE = Tire.particles,
+                         ASP2 = Asphalt,
+                         CTR0 = CT.T0,
+                         CTR45 = CT.T45,
+                         CTR376 = CT.T376,
+                         CTD6 = CT.dust.6,
+                         CTD7 = CT.dust.7,
+                         CRE2 = Creosote.railway.ties,
+                         CRE4 = Creosote.product) %>%
+  mutate(pcode = gsub('P', '', pcode))
+
+compound_info <- pah::pah_compounds
+source_profiles <- left_join(profiles_clean, select(compound_info, pcode, molwt, casrn))
+
+# test if each profile sums to 1
+test <- colSums(profiles_clean[, 4:26])
+
+devtools::use_data(source_profiles, overwrite = T)
+
+
+
+
