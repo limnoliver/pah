@@ -4,7 +4,8 @@
 \alias{get_compound_info}
 \title{get_compound_info}
 \usage{
-get_compound_info(pah_dat, merge_type = "name", merge_col = "parameter_nm")
+get_compound_info(pah_dat, merge_type = "name",
+  merge_col = "parameter_nm")
 }
 \arguments{
 \item{pah_dat}{data frame of user PAH data, either retrieved using the get_pah data, or

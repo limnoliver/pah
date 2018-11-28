@@ -14,6 +14,7 @@
 #' @param conc_column string, column that contains sample concentrations
 #' @param conc_unit string, the units of PAH concentrations,
 #' either "ppb" (ug/kg) or "ppm" (mg/kg).
+#' @param compound_column string, column that contains compound names.
 #' @param calc_type how to calculate mass fractions, either for each individual sample ('by_sample'),
 #' or by summary statistics across all samples 'summary'. Summary calculates mass fractions for all quartiles,
 #' minimum, mean, and maximum of sample concentrations.
@@ -29,14 +30,21 @@
 #' @import ggplot2
 #' @examples
 
-calc_mass_fractions <- function(compound_info, sample_column, conc_column, conc_unit = "ppb", calc_type = 'summary', plot = FALSE) {
+calc_mass_fractions <- function(compound_info, sample_column, conc_column, compound_column, conc_unit = "ppb", calc_type = 'summary', plot = FALSE) {
   # make column names dplyr-ready
   quo_sample_column <- sym(sample_column)
   quo_conc_column <- sym(conc_column)
+  quo_compound_column <- sym(compound_column)
 
   dat <- filter(compound_info, EPApriority16 %in% TRUE) %>%
     group_by(!!quo_sample_column) %>%
     summarize(sum_EPA16 = sum(!!quo_conc_column))
+
+  toc <- filter(compound_info, !!quo_compound_column %in% 'TOC') %>%
+    mutate(fTOC = !!quo_conc_column/100) %>%
+    select(!!quo_sample_column, fTOC)
+
+  dat <- left_join(dat, toc)
 
   if (conc_unit == 'ppb') {
     dat <- mutate(dat, concentration = (sum_EPA16/1000))

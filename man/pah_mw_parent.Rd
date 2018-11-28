@@ -5,7 +5,8 @@
 \title{pah_mw_parent}
 \usage{
 pah_mw_parent(compound_info, sample_column, conc_column, compound_column,
-  statistic = "average", parent_compounds, alkylated_compounds, plot = TRUE)
+  statistic = "average", parent_compounds, alkylated_compounds,
+  plot = TRUE)
 }
 \arguments{
 \item{compound_info}{The output dataframe from `get_compound_info`, which contains sample concentrations

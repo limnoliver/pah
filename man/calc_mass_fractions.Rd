@@ -5,7 +5,8 @@
 \title{calc_mass_fractions}
 \usage{
 calc_mass_fractions(compound_info, sample_column, conc_column,
-  conc_unit = "ppb", calc_type = "summary", plot = FALSE)
+  compound_column, conc_unit = "ppb", calc_type = "summary",
+  plot = FALSE)
 }
 \arguments{
 \item{compound_info}{The output dataframe from `get_compound_info`, which contains sample
@@ -15,6 +16,8 @@ concentrations as well as compound-specific information, including whether the c
 \item{sample_column}{string, column that contains unique sample identifier}
 
 \item{conc_column}{string, column that contains sample concentrations}
+
+\item{compound_column}{string, column that contains compound names.}
 
 \item{conc_unit}{string, the units of PAH concentrations,
 either "ppb" (ug/kg) or "ppm" (mg/kg).}

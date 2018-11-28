@@ -4,8 +4,9 @@
 \alias{pah_profiler}
 \title{pah_profiler}
 \usage{
-pah_profiler(pah_dat, compound_column = "casrn", sample_column, conc_column,
-  source_profs = source_profiles, creosote = "interpolated")
+pah_profiler(pah_dat, compound_column = "casrn", sample_column,
+  conc_column, source_profs = source_profiles,
+  creosote = "interpolated")
 }
 \arguments{
 \item{pah_dat}{dataframe with PAH concentrations, where there is one column of compounds, and each sample

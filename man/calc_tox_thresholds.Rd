@@ -4,8 +4,8 @@
 \alias{calc_tox_thresholds}
 \title{calc_tox_thresholds}
 \usage{
-calc_tox_thresholds(compound_info, sample_column, conc_column, compound_column,
-  conc_unit = "ppb")
+calc_tox_thresholds(compound_info, sample_column, conc_column,
+  compound_column, conc_unit = "ppb")
 }
 \arguments{
 \item{compound_info}{The output dataframe from `get_compound_info`, which contains sample
