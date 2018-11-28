@@ -41,8 +41,7 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
     summarize(sum_EPA16 = sum(!!quo_conc_column))
 
   toc <- filter(compound_info, !!quo_compound_column %in% 'TOC') %>%
-    mutate(fTOC = !!quo_conc_column/100) %>%
-    select(!!quo_sample_column, fTOC)
+    select(id = !!quo_sample_column, TOC = !!quo_compound_column)
 
   dat <- left_join(dat, toc)
 
@@ -116,6 +115,11 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
     } else {
       frac_for_plot <- mutate(frac_by_site, id = dat[[sample_column]]) %>%
         gather(key = "source", value = "mass_fraction", -id)
+
+      fract_for_plot <- left_join(frac_for_plot, toc) %>%
+        mutate(category = case_when(mass_fraction > 100 ~ 'impossible (>100%)',
+                                    mass_fraction < 100 & TOC < mass_fraction ~ 'unlikely (>%TOC)',
+                                    mass_fraction < 100 & TOC > mass_fraction ~ 'possible'))
 
       sample_order <- arrange(dat, concentration)
       frac_for_plot$id <- factor(frac_for_plot$id, levels = sample_order[[sample_column]])
