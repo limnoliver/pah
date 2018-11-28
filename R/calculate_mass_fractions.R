@@ -41,9 +41,9 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
     summarize(sum_EPA16 = sum(!!quo_conc_column))
 
   toc <- filter(compound_info, !!quo_compound_column %in% 'TOC') %>%
-    select(id = !!quo_sample_column, TOC = !!quo_compound_column)
+    select(id = !!quo_sample_column, TOC = !!quo_conc_column)
 
-  dat <- left_join(dat, toc)
+  #dat <- left_join(dat, toc)
 
   if (conc_unit == 'ppb') {
     dat <- mutate(dat, concentration = (sum_EPA16/1000))
@@ -116,10 +116,11 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
       frac_for_plot <- mutate(frac_by_site, id = dat[[sample_column]]) %>%
         gather(key = "source", value = "mass_fraction", -id)
 
-      fract_for_plot <- left_join(frac_for_plot, toc) %>%
-        mutate(category = case_when(mass_fraction > 100 ~ 'impossible (>100%)',
-                                    mass_fraction < 100 & TOC < mass_fraction ~ 'unlikely (>%TOC)',
-                                    mass_fraction < 100 & TOC > mass_fraction ~ 'possible'))
+      frac_for_plot <- left_join(frac_for_plot, toc) %>%
+        mutate(category = case_when(mass_fraction > 100 ~ 'impossible (> 100%)',
+                                    mass_fraction < 100 & TOC < mass_fraction ~ 'unlikely (> %TOC)',
+                                    mass_fraction < 100 & TOC >= mass_fraction ~ 'possible (< %TOC)'))
+
 
       sample_order <- arrange(dat, concentration)
       frac_for_plot$id <- factor(frac_for_plot$id, levels = sample_order[[sample_column]])
@@ -127,17 +128,19 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
       source_order <- arrange(source_mean, concentration)
       frac_for_plot$source <- factor(frac_for_plot$source, levels = source_order[['source']])
 
+      # drop any NA values where TOC is missing
+      frac_for_plot <- filter(frac_for_plot, !is.na(category))
+
       # plot
-      p <- ggplot(frac_for_plot, aes(x = source, y = id)) +
-        geom_tile(aes(fill = cut(mass_fraction, c(-Inf, 5, 100, Inf))), color = 'white') +
-        scale_fill_manual(name = 'Mass Fraction', values = c("(-Inf,5]" = '#1a9850',
-                                                             "(5,100]" = '#fdae61',
-                                                             "(100, Inf]" = '#d73027'),
-                          labels = c('possible (<5%)', 'unlikely (5-100%)', 'impossible (>100%)')) +
+      p <- ggplot(frac_for_plot, aes(y = source, x = id)) +
+        geom_tile(aes(fill = category), color = 'white') +
+        scale_fill_manual(name = 'Mass Fraction', values = c("possible (< %TOC)" = '#1a9850',
+                                                             "unlikely (> %TOC)" = '#fdae61',
+                                                             "impossible (> 100%)" = '#d73027')) +
         theme_bw() +
-        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
         labs(x = "", y = "") +
-        geom_hline(yintercept = round(nrow(dat)/4, 0)*1:3, size = 1)
+        geom_vline(xintercept = round(nrow(dat)/4, 0)*1:3, size = 1)
 
       out <- p
     }
