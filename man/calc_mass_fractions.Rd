@@ -6,7 +6,7 @@
 \usage{
 calc_mass_fractions(compound_info, sample_column, conc_column,
   compound_column, conc_unit = "ppb", calc_type = "summary",
-  plot = FALSE)
+  plot = FALSE, sample_order = "norm_pah_conc")
 }
 \arguments{
 \item{compound_info}{The output dataframe from `get_compound_info`, which contains sample
@@ -27,6 +27,12 @@ or by summary statistics across all samples 'summary'. Summary calculates mass f
 minimum, mean, and maximum of sample concentrations.}
 
 \item{plot}{logical, whether 'by_sample' should be summarized as a tile plot rather than table.}
+
+\item{sample_order}{string, how the samples should be ordered, either by 'pah_conc', which is
+the sum of the EPA 16 priority compounds, or 'norm_pah_conc' which is the TOC-normalized PAH 16 concentration.
+Sources are considered "unlikely" when the percent of source to sample is greater than the percent TOC
+in the sample, given that PAHs are limited to the organic fraction. Ordering by TOC-normalized PAH concentration
+gives a smoother look to the figure, but is less intuitive in terms of sample ordering.}
 }
 \value{
 If calc_type is "summary", each row represents a source, and source mean concentrations,
