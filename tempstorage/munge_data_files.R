@@ -78,6 +78,12 @@ test <- colSums(profiles_clean[, 4:26])
 
 devtools::use_data(source_profiles, overwrite = T)
 
+# modify sources dataframe to add CTR0, CTR45, CTR376
+sources <- pah::sources %>%
+  add_row(source_subcategory = 'coal tar', source_name = c('Coal tar sealant, day 0', 'Coal tar sealant, day 45', 'Coal tar sealant, day 376'),
+          source_short_name = c('Coal tar seal. prod. 0d', 'Coal tar seal. prod. 45d', 'Coal tar seal. prod. 376d'),
+          source_short_no_ref = c('Coal tar seal. prod. 0d', 'Coal tar seal. prod. 45d', 'Coal tar seal. prod. 376d'),
+          source_abbrev = c('CTR0', 'CTR45', 'CTR376'))
 
 
-
+devtools::use_data(sources, overwrite = T)
