@@ -10,6 +10,7 @@
 #' of the chosen components space.
 #' @param sources a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
+#' @param source_abbreviation logical, whether source abbreviations should be used when plot_type = 'distance_boxplot'.
 #' @return If plot_type = 'distance_boxplot', a single boxplot is returned with source IDs on the x axis and
 #' Euclidean distances on the y axis. If plot_type = 'pca_components', a scatterplot of
 #' all possible combinations of chosen components are included in a panel matrix, with samples as black dots
@@ -21,10 +22,17 @@
 #' @importFrom cowplot plot_grid
 #' @examples
 
-plot_pca <- function(pca_dat, plot_type = "distance_boxplot") {
+plot_pca <- function(pca_dat, plot_type = "distance_boxplot", source_abbreviation = FALSE) {
   if (plot_type == "distance_boxplot") {
     distance <- pca_dat$pca_distance
 
+    if (source_abbreviation == FALSE) {
+      distance <- left_join(distance,
+                            select(pah::sources, source_abbrev, source_short_no_ref),
+                            by = c('source' = 'source_abbrev')) %>%
+        select(-source) %>%
+        rename(source = source_short_no_ref)
+    }
     median_diff <- distance %>%
       group_by(source) %>%
       summarize(median = median(euc_dist)) %>%
@@ -33,7 +41,7 @@ plot_pca <- function(pca_dat, plot_type = "distance_boxplot") {
     distance$source <- factor(distance$source, levels = median_diff$source)
 
     p <- ggplot(distance, aes(x = source, y = euc_dist)) +
-      geom_boxplot() +
+      geom_boxplot(outlier.shape = 1) +
       theme_bw() +
       labs(y = "Euclidean distance\n(zero = identical to sample)", x = "") +
       theme(panel.grid.minor = element_blank(),
