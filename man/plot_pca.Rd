@@ -4,7 +4,8 @@
 \alias{plot_pca}
 \title{plot_pca}
 \usage{
-plot_pca(pca_dat, plot_type = "distance_boxplot")
+plot_pca(pca_dat, plot_type = "distance_boxplot",
+  source_abbreviation = FALSE)
 }
 \arguments{
 \item{pca_dat}{The output from 'pah_pca' which includes the component data as well as the calculated Euclidean
@@ -13,6 +14,8 @@ distances data.}
 \item{plot_type}{Which plot to create. Options include 'distance_boxplot' which summarizes the Euclidean
 distances by source, 'pca_components' which shows where the sources and samples lie in all combinations
 of the chosen components space.}
+
+\item{source_abbreviation}{logical, whether source abbreviations should be used when plot_type = 'distance_boxplot'.}
 
 \item{sources}{a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.}
