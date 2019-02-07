@@ -54,7 +54,7 @@ plot_pca <- function(pca_dat, plot_type = "distance_boxplot", source_abbreviatio
 
     plot_num <- 1
     plot_list <- list()
-    my_labels <- comp_dat$sample_id
+    my_labels <- comp_dat$unique_id
     my_labels[comp_dat$type == 'sample'] <- ""
 
     n_pca <- ncol(comp_dat) - 2
