@@ -5,7 +5,8 @@
 \title{plot_profiles}
 \usage{
 plot_profiles(profile_dat, plot_type = "boxplot", sources_plot = NA,
-  samples_plot = "all", sample_column = "sample_id")
+  samples_plot = "all", sample_column = "sample_id",
+  source_abbreviation = FALSE)
 }
 \arguments{
 \item{profile_dat}{The output of `pah_profiler` which includes the proportional concentration
@@ -22,6 +23,8 @@ in a profile plot to compare to samples. Set equal to "all" to include paneled p
 Can either be a single unique ID or "all" to indicate taking the mean and standard deviation of all samples.}
 
 \item{sample_column}{Column that contains unique sample IDs.}
+
+\item{source_abbreviation}{logical, whether source abbreviations should be used when plot_type = 'distance_boxplot'.}
 }
 \description{
 Creates common figures from the calculated distance between sample and source profiles.

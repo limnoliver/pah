@@ -15,15 +15,24 @@
 #' @param sample_column Column that contains unique sample IDs.
 #' @param samples_plot If `plot_type` = `profile`, a unique sample ID to use to plot against source profiles.
 #' Can either be a single unique ID or "all" to indicate taking the mean and standard deviation of all samples.
+#' @param source_abbreviation logical, whether source abbreviations should be used when plot_type = 'distance_boxplot'.
 #' @import ggplot2
 #' @import dplyr
 #' @importFrom rlang sym
 #' @examples
 
 plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA, samples_plot = 'all',
-                          sample_column = 'sample_id') {
+                          sample_column = 'sample_id', source_abbreviation = FALSE) {
   quo_sample_column <- sym(sample_column)
   if (plot_type == 'boxplot') {
+
+    if (source_abbreviation == FALSE) {
+      distance <- left_join(profile_dat,
+                            select(pah::sources, source_abbrev, source_short_no_ref),
+                            by = c('source' = 'source_abbrev')) %>%
+        select(-source) %>%
+        rename(source = source_short_no_ref)
+    }
 
       sum_chi2 <- profile_dat[[2]]
 
