@@ -47,14 +47,13 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
 
     # create boxplot
     p <- ggplot(sum_chi2, aes(x = source, y = sum_chi2)) +
-      geom_boxplot() +
+      geom_boxplot(outlier.shape = 1) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, margin = margin(t = 0))) +
-      labs(x = '', y = 'Sum Chi2')
+      labs(x = '', y = 'Sum Chi2\n(zero = identical to sample)')
 
   } else if (plot_type == 'profile') {
     pro_dat <- profile_dat[[1]]
-
     if (samples_plot == 'all') {
       # calculate sample means and sds if samples == 'all'
       sample_pro_dat <- group_by(pro_dat, Compound) %>%
