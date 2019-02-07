@@ -26,15 +26,17 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
   quo_sample_column <- sym(sample_column)
   if (plot_type == 'boxplot') {
 
+    sum_chi2 <- profile_dat[[2]]
+
     if (source_abbreviation == FALSE) {
-      distance <- left_join(profile_dat,
+      sum_chi2 <- left_join(sum_chi2,
                             select(pah::sources, source_abbrev, source_short_no_ref),
                             by = c('source' = 'source_abbrev')) %>%
         select(-source) %>%
         rename(source = source_short_no_ref)
     }
 
-      sum_chi2 <- profile_dat[[2]]
+
 
       order.vals <- sum_chi2 %>%
         group_by(source) %>%
@@ -47,7 +49,7 @@ plot_profiles <- function(profile_dat, plot_type = 'boxplot', sources_plot = NA,
     p <- ggplot(sum_chi2, aes(x = source, y = sum_chi2)) +
       geom_boxplot() +
       theme_bw() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 0))) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, margin = margin(t = 0))) +
       labs(x = '', y = 'Sum Chi2')
 
   } else if (plot_type == 'profile') {
