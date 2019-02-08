@@ -128,7 +128,7 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
 
       frac_for_plot <- left_join(frac_for_plot, toc) %>%
         mutate(category = case_when(TOC < mass_fraction ~ 'impossible (> %TOC)',
-                                    TOC > mass_fraction & TOC*0.5 < mass_fraction ~ 'unlikely (> 0.5 x %TOC)',
+                                    TOC >= mass_fraction & TOC*0.5 < mass_fraction ~ 'unlikely (> 0.5 x %TOC)',
                                     TOC *0.5 >= mass_fraction ~ 'possible (< 0.5 x %TOC)'))
 
       if (sample_order == 'pah_conc') {
