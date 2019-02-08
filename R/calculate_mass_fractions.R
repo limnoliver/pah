@@ -127,9 +127,9 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
         gather(key = "source", value = "mass_fraction", -id)
 
       frac_for_plot <- left_join(frac_for_plot, toc) %>%
-        mutate(category = case_when(mass_fraction > 100 ~ 'impossible (> 100%)',
-                                    mass_fraction < 100 & TOC < mass_fraction ~ 'unlikely (> %TOC)',
-                                    mass_fraction < 100 & TOC >= mass_fraction ~ 'possible (< %TOC)'))
+        mutate(category = case_when(TOC < mass_fraction ~ 'impossible (> %TOC)',
+                                    TOC > mass_fraction & TOC*0.5 < mass_fraction ~ 'unlikely (> 0.5 x %TOC)',
+                                    TOC *0.5 >= mass_fraction ~ 'possible (< 0.5 x %TOC)'))
 
       if (sample_order == 'pah_conc') {
         plot_sample_order <- arrange(dat, concentration)
@@ -149,9 +149,9 @@ calc_mass_fractions <- function(compound_info, sample_column, conc_column, compo
       # plot
       p <- ggplot(frac_for_plot, aes(y = source, x = id)) +
         geom_tile(aes(fill = category), color = 'white') +
-        scale_fill_manual(name = 'Mass Fraction', values = c("possible (< %TOC)" = '#1a9850',
-                                                             "unlikely (> %TOC)" = '#fdae61',
-                                                             "impossible (> 100%)" = '#d73027')) +
+        scale_fill_manual(name = 'Mass Fraction', values = c("possible (< 0.5 x %TOC)" = '#1a9850',
+                                                             "unlikely (> 0.5 x %TOC)" = '#fdae61',
+                                                             "impossible (> %TOC)" = '#d73027')) +
         theme_bw() +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
         labs(x = "", y = "") +
