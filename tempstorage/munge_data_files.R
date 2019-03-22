@@ -20,7 +20,8 @@ dat_c <- select(dat_c, Parameter, parameter_nm, pcode = Parameter.code, casrn,
                 sourceProfile12, creosoteProfile11, Ingersoll_09_included,
                 TEC, PEC, coc_pah_max = Coc.pah.max, coc_pah_fcv = Coc.pah.fcv)
 
-
+dat_c <- add_row(dat_c, Parameter = 'TOC', parameter_nm = 'Organic carbon, bed sediment, total, dry weight, grams per kilogram',
+                         pcode = '00687')
 dat_c <- mutate(dat_c,
                 EPApriority16 = ifelse(is.na(EPApriority16), FALSE, TRUE),
                 Macdonald_SQG = ifelse(is.na(Macdonald_SQG), FALSE, TRUE),
@@ -34,6 +35,8 @@ dat_c$coc_pah_fcv[dat_c$parameter_nm %in% 'c2-alkylated fluorene'] <- 686
 dat_c$coc_pah_fcv[dat_c$parameter_nm %in% 'c3-alkylated fluorene'] <- 769
 
 pah_compounds <- filter(dat_c, !is.na(Parameter))
+
+
 
 devtools::use_data(pah_compounds, overwrite = T)
 
