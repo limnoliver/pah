@@ -1,0 +1,47 @@
+site_abbrev,site_name,sample_type,USGS_stationID,latitude,Longitude,drainage_area_km2,residential_pct,commercial_pct,industrial_pct,transportation_pct,parking_pct,other_urban_pct,urban_total_pct,natural_areas_pct,agriculture_pct,non_urban_pct
+BUT-01,Butler Ditch at Butler,stream sediment,040870377,43.1121,-88.0806,18.3,53.6,2.2,3.3,15.5,4.4,2.8,82,15.7,2.3,18
+DOU-01,Dousman Ditch at Brookfield Mall ,stream sediment,430213088063601,43.038,-88.1101,0.9,9.5,22.3,0,15.1,44.9,0.1,91.9,8.1,0,8.1
+EDG-01,Edgerton Channel nr Pennsylvania Ave at Milwaukee ,stream sediment,040871474,42.9524,-87.878,1,26.2,2.8,23.8,13,8.4,3.3,77.5,22.5,0,22.5
+HON-01,Honey Creek nr Portland Ave at Wauwatosa,stream sediment,04087118,43.0414,-88.0126,26.8,50.3,2.5,1.2,23.3,6.5,9.2,93,7,0,7
+HON-02,Honey Creek at S. 68th St at Milwaukee,stream sediment,04087100,42.978,-87.9976,8.6,50.3,2.7,0.2,22,7,8.1,90.3,9.7,0,9.7
+KKR-02,Kinnickinnic River at Lincoln Ave,stream sediment,040871607,43.0026,-87.9117,61.5,35.7,3.3,4.6,21.1,7.9,16.2,88.9,10.9,0.2,11.1
+KKR-03,Kinnickinnic River at Jackson Park at Milwaukee ,stream sediment,04087147,42.998,-87.9667,12.6,47.1,3.4,6.2,23.5,6.3,5.3,91.7,8.3,0,8.3
+LIN-01,Lincoln at 27th St at Milwaukee,stream sediment,04086949,43.1115,-87.9436,47.9,40.8,2.6,5.4,22.4,6.1,8.7,85.9,14,0.1,14.1
+LIN-02,Lincoln Trib at Custer Ave at Milwaukee,stream sediment,04086953,43.1152,-87.9381,3.1,31.3,3.6,15.9,16.3,9.9,8.7,85.7,14.3,0,14.3
+LIN-03,Lincoln Creek at 76th St at Milwaukee,stream sediment,04086898,43.1508,-88.0045,1.7,14.2,8.8,19.9,11.6,22.2,1.3,78,19.9,2.1,22
+LIN-04,Lincoln Trib at 60th St,stream sediment,04086940,43.101,-87.9864,3,51.5,4.4,0.1,28,5.2,8.6,98,2,0,2
+LLY-02,Lilly Cr at Good Hope Rd nr Menomonee Falls,stream sediment,0408703164,43.1488,-88.0814,7.4,50.2,0.9,4.4,15.2,2,1.2,74,15.1,10.9,26
+LMN-01,Little Menomonee at Lovers Lane Rd at Milwaukee,stream sediment,04087072,43.1062,-88.0537,56.5,21,1.4,4,11.4,3.8,4.5,46.1,25.3,28.6,53.9
+LMN-02,Little Menomonee at Bradley Rd near Granville,stream sediment,04087054,43.1644,-88.0253,33.7,13.4,0.7,3.7,6,2.1,1.8,27.6,25.6,46.7,72.4
+LMN-03,Little Menomonee at County Line Rd near Granville ,stream sediment,04087051,43.1926,-88.0383,25.7,14.3,0.1,0.9,5.2,0.2,1.1,21.8,20.3,57.9,78.2
+LYO-01,Lyons Cr at 55th and Holt Streets at Milwaukee,stream sediment,040871465,42.9832,-87.9839,1.4,56.3,3,0,24.1,4.1,7.4,94.8,5.2,0,5.2
+MEN-01,Menomonee at Ridge Blvd at Wauwatosa,stream sediment,040870837,43.0655,-88.037,234.1,24.6,1.8,4.2,12.1,4.4,4,51.1,26.8,22,48.9
+MEN-02,Menomonee Trib at Fond Du Lac Ave,stream sediment,040870313,43.1755,-88.0888,13.8,16.4,1.5,9.6,12.2,5.7,2.4,47.8,26.1,26.1,52.2
+MEN-03,Menomonee at North Emmber Ln at Milwaukee,stream sediment,04087143,43.0323,-87.9286,358.8,30.6,2.3,3.7,15.3,5.5,5.8,63.1,22.4,14.5,36.9
+MEN-04,Menomonee at Mequon Rd nr Germantown,stream sediment,040870182,43.2139,-88.1397,48.6,9.4,0.8,3.2,5.9,2.4,2,23.7,31.2,45.1,76.3
+MEN-05,Menomonee at Butler,stream sediment,04087040,43.1132,-88.0701,153.4,25.4,1.7,3.5,11.4,3.7,2,47.7,29.2,23.1,52.3
+MIL-01,Milwaukee River at Mouth,stream sediment,04087170,43.0251,-87.8992,2239.2,NA,NA,NA,NA,NA,NA,30*,27,43,70
+MIL-02,Milwaukee River at Wells St,stream sediment,04087012,43.0398,-87.9109,1806.2,NA,NA,NA,NA,NA,NA,19*,31,50,81
+MIL-03,Milwaukee River at Milwaukee ,stream sediment,04087000,43.101,-87.9112,1781.8,NA,NA,NA,NA,NA,NA,18*,31,51,82
+MIL-04,Milwaukee River near Brown Deer,stream sediment,04086800,43.1856,-87.9579,1674.7,NA,NA,NA,NA,NA,NA,14*,32,54,86
+NOR-01,Northridge Lake,stream sediment,431046087595401,43.1808,-88.0034,0.3,2.7,14.3,0,10.1,48.6,9.1,84.8,15.2,0,15.2
+NOY-01,Noyes Creek at Milwaukee,stream sediment,04087060,43.1396,-88.0195,7.7,31.4,2.8,5.7,21.4,8.3,12.8,82.4,17.6,0,17.6
+ROO-01,Root at 84th St at Greenfield,stream sediment,040872138,42.9473,-88.0176,35.7,48.4,2.9,0.3,20.2,5,4.8,81.7,17.9,0.4,18.3
+ROO-03,Root Trib at Martin Luther High School at Greenfield,stream sediment,040872139,42.9474,-88.0158,2.2,40.3,10.5,0,16.9,23,3.9,94.6,5.4,0,5.4
+ROO-04,Root Trib at Kulwicki Park at Greenfield,stream sediment,040872127,42.9647,-88.0462,5,56.4,0.7,0,18.5,1.8,2.7,80.1,17.7,2.1,19.9
+ROO-06,Root at West Allis,stream sediment,040872118,42.989,-88.0574,9.4,46.6,4.5,0.9,18.8,7,7.3,85.2,14.8,0,14.8
+ROO-07,Root Trib at Cleveland Ave at West Allis,stream sediment,040872119,42.9951,-88.053,3.3,34.7,9.3,2.2,27.1,13.9,7.4,94.6,5.4,0,5.4
+SCH-01,Schoonmaker Cr at Wauwatosa,stream sediment,04087125,43.0565,-87.9935,4.7,61.4,2.4,0,28.5,2.1,3.2,97.7,2.3,0,2.3
+UND-02,Underwood at Elm Grove Village Park,stream sediment,040870851,43.0503,-88.0814,21.6,49.1,2.6,0.2,14,5.7,5.2,76.7,21.9,1.4,23.3
+UND-03,Underwood Trib at Blue Mound Rd,stream sediment,04087085631,43.0356,-88.0783,1.1,22.6,13.9,0,17.7,18.2,0,72.4,27.6,0,27.6
+UND-04,Underwood at Hansen Golf Course at Wauwatosa,stream sediment,040870889,43.0587,-88.0342,50.7,41.7,3.6,1.9,17.9,8,7.7,80.7,18.7,0.6,19.3
+WIL-01,Willow at Maple Rd nr Germantown,stream sediment,040870195,43.2072,-88.1435,16.6,21.4,0.7,1.9,9.3,1.4,0.1,34.8,30.2,35,65.2
+WMD-01,West Milwaukee Ditch at West Milwaukee,stream sediment,040871468,43.0081,-87.9731,1.1,44.1,4.8,14.3,24.8,5.3,5.3,98.6,1.4,0,1.4
+WPC-01,Wilson Park Creek at St Lukes,stream sediment,040871488,42.9902,-87.9523,29.6,28.1,3.5,4.4,18.6,10.2,22.6,87.5,12,0.5,12.5
+WPC-02,Wilson Park Creek at 13th St at Milwaukee,stream sediment,04087148,42.9687,-87.9313,18.4,20.7,3.1,6.7,16.5,11.8,28.2,87,12.2,0.7,13
+PL-AZ,"PL-AZ at Milwaukee, WI (concrete)",parking lot,430907088002101,43.152,-88.006,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+PL-BSM,"PL-BSM at Brookfield, WI (unsealed asphalt)",parking lot,430205088064101,43.0345,-88.1113,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+PL-SRM,"PL-SRM at Greendale, WI (unsealed asphalt)",parking lot,425700088002601,42.9503,-88.0066,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+PL-BANK,"PL-BANK at Brookfield, WI (sealed asphalt)",parking lot,430217088063101,43.0377,-88.1093,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+PL-DMV,"PL-DMV at Milwaukee, WI (sealed asphalt)",parking lot,430904088004001,43.151,-88.0112,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+PL-MLHS,"PL-MLHS at Greendale, WI (sealed asphalt)",parking lot,425659088003901,42.9501,-88.0104,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
