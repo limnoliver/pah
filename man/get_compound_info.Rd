@@ -5,7 +5,7 @@
 \title{get_compound_info}
 \usage{
 get_compound_info(pah_dat, merge_type = "name",
-  merge_col = "parameter_nm")
+  merge_col = "parameter_nm", compound_info = pah_compounds)
 }
 \arguments{
 \item{pah_dat}{data frame of user PAH data, either retrieved using the get_pah data, or
@@ -20,6 +20,10 @@ Service Registry Number ('casrn'), or compound name ('name'). Note that alkylate
 casrn numbers, and metadata on these compounds will not be merged if merge_type = "casrn".}
 
 \item{merge_col}{column name that contains the PAH identifier by which to merge}
+
+\item{compound_info}{table with compound metadata. A built-in table is the default but may not contain
+all compounds in user-supplied dataset. See documentation for the \code{\link{pah_compounds}}
+table to see if it fits your needs.}
 }
 \value{
 A data frame with all of the columns from the user-supplied pah_dat, as well as columns from the
