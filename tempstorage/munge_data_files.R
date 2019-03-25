@@ -90,3 +90,25 @@ sources <- pah::sources %>%
 
 
 devtools::use_data(sources, overwrite = T)
+
+###############################
+## site metadata #######
+##############################
+
+# read in site metadata from Baldwin et al 2017
+# to use in examples
+
+site_metadata <- readxl::read_xlsx('tempstorage/etc3694-sup-0002-suppdata-s2.xlsx',
+                                   sheet = 1, skip = 5, col_names = c('site_abbrev', 'site_name', 'toxicity_bioassay',
+                                                                      'site_id', 'latitude', 'longitude', 'drainage_area_km2',
+                                                                      'residential_pct', 'commercial_pct', 'industrial_pct', 'transportation_pct',
+                                                                      'parking_pct', 'other_urban_pct', 'urban_total_pct', 'natural_area_pct',
+                                                                      'agriculture_pct', 'non_urban_total_pct'),
+                                   col_types = c(rep('text', 4), rep('numeric', 9), 'text', rep('numeric', 3)), na = c('', NA))
+site_metadata <- site_metadata %>%
+  filter(!grepl(pattern = 'parking lot', site_abbrev, ignore.case = TRUE)) %>%
+  mutate(sample_type = c(rep('stream sample', 40), rep('parking lot', 6))) %>%
+  select(-toxicity_bioassay) %>%
+  mutate(urban_total_pct = as.numeric(gsub('\\*', '', urban_total_pct)))
+
+devtools::use_data(site_metadata, overwrite = T)
