@@ -63,7 +63,7 @@ pah_pca <- function(profiles, perc_cutoff = 10, sample_column) {
   profiles_t <- filter_all(profiles_t, all_vars(. != 0))
 
   sample_id <- profiles_t[, sample_column]
-  sample_id <- sample_id[[1]]
+  #sample_id <- sample_id[[1]]
   type <- profiles_t$type
   #
   profiles_t <- select(profiles_t, -type, -!!quo_sample_column)
