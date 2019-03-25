@@ -18,6 +18,7 @@
 #' bars if no groups are given.
 #' @param conc_units character string, units for PAH concentration that will be used
 #' in labels on plots
+#' @param thresholds logical, whether to include the EPA 16 priority compound thresholds via a horizontal line. This is only appriopriate if the values being plotted are the EPA priority sum concentration.
 #' @import ggplot2
 #' @import dplyr
 #' @importFrom rlang .data
@@ -26,12 +27,13 @@
 #'
 plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample',
                      compound_column = 'Parameter', compound_plot = "Total PAH",
-                     color_column = NA, group_column = NA, order_column = NA, conc_units = "ppb") {
+                     color_column = NA, group_column = NA, order_column = NA, conc_units = "ppb",
+                     thresholds = TRUE) {
 
   quo_compound_column <- sym(compound_column)
   quo_conc_column <- sym(conc_column)
   quo_sample_id_column <- sym(sample_id_column)
-  quo_group_column <- sym(group_column)
+  if (!is.na(group_column)) {quo_group_column <- sym(group_column)}
 
   order_column <- ifelse(is.na(order_column), conc_column, order_column)
   quo_order_column <- sym(order_column)
@@ -57,7 +59,7 @@ plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample'
     p <- p + aes_string(fill = color_column)
     }
 
-    if (length(compound_column) > 1) {
+    if (length(compound_plot) > 1) {
       # facet by compound if more than one compound ID is given
       p <- p + facet_wrap(as.formula(paste('~',compound_column)), ncol = ifelse(length(compound_plot) > 3, 2, 1))
     }
@@ -74,8 +76,8 @@ plot_pah <- function(pah_dat, conc_column = 'Value', sample_id_column = 'Sample'
 
     pah_dat_temp <- pah_dat_temp %>%
       ungroup() %>%
-      mutate(thresholdPEC = ifelse((!!quo_compound_column) == "Priority Pollutant PAH", 22800, NA),
-             thresholdTEC = ifelse((!!quo_compound_column) == "Priority Pollutant PAH", 1610, NA))
+      mutate(thresholdPEC = ifelse(thresholds, ifelse(conc_units == 'ppb', 22800,22.8), NA),
+             thresholdTEC = ifelse(thresholds, ifelse(conc_units == 'ppb', 1610,1.610), NA))
 
     dummy.dat <- pah_dat_temp %>%
       select(!!quo_group_column, !!quo_compound_column, thresholdPEC, thresholdTEC) %>%
