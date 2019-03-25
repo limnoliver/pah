@@ -1,0 +1,191 @@
+---
+title: "A multiple-lines-of-evidence approach to understanding sources of PAHs in the environment"
+author: "Samantha Oliver"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(dataRetrieval)
+library(pah)
+library(dplyr)
+library(ggplot2)
+```
+There are several techniques that can be used to identify the sources of contaminants in the 
+environment. For polycyclic aromatic hydrocarbons (PAHs), there is no one perfect test, and many
+methods have limitations. However, taken together, a multiple-lines-of-evidence approach can
+give us more confidence in the sources of these contaminants in the environment. This package uses
+common PAH input data (source profiles, sample profiles) and generates the analyses and figures 
+of the multiple-lines-of-evidence approach used by Baldwin et al. 2017. 
+
+## Package Overview
+
+The package can produce many of the analyses and figures used by Baldwin et al. (2017). The primary input into the package is PAH concentration data with corresponding site IDs. The package itself uses several built-in datasets that describe PAH compounds and potential sources. These include potential source concentrations (`source_conc`), sources profiles (`source_profiles`), and source compound ratios (`source_ratios`). Additionally, the package includes metadata for PAH compounds, including molecular weight and whether the compound is used in source profiles or is part of the EPA priority 16 compounds list. These datasets are not exauhstive; if you measured concentrations of compounds not in these lists or have additional potential sources, you can override the default arguments in many of the package functions in order to include your own data. If you are providing your own tables, be sure they include all of the same columns and have identical column naming conventions. 
+
+## Step 1: Import your data
+
+If your data is in NWIS, getting your data ready for analysis is straightfoward. For example, to retrieve the data from Baldwin et al. 2017, you can use a `dataRetrieval` call to NWIS:
+
+```{r}
+my_sites <- c("040870377", "430213088063601", "040871474", "04087100",
+                   "04087118", "04087147", "040871607", "0408703164", "04086949",
+                   "04086898", "04086940", "04086953", "04087054",
+                   "04087051", "04087072", "040871465", "04087040",
+                   "040870182", "04087143", "040870837", "0408703101", "04087000",
+                   "04087170", "04087012", "04086800", "431046087595401",
+                   "04087060", "430907088002101", "430217088063101",
+                   "430205088064101", "430904088004001", "425659088003901",
+                   "425700088002601", "040872138", "040872118", "040872119",
+                   "040872127", "040872139", "04087125", "040870851", "040870889",
+                   "04087085631", "040871468", "040870195", "04087148", "040871488",
+                   "04087119", "04087159", "040869415", "04087214", "04087088", "04087220",
+                   "04087142", "04087120", "04087204", "04087070", "04087030",
+                   "040870195", "04086600")
+
+my_dat <- dataRetrieval::readNWISqw(siteNumbers = my_sites, parameterCd = pah::pah_pcodes, 
+                                    startDate = '2014-04-01', endDate = '2014-09-01')
+
+```
+## Step 2: Merge your data with compound information
+
+Many analyses in this package rely on supporting metadata about each compound. For example, molecular weight or threshold toxicity values will allow for further analysis. The `pah` package has built-in data to help you with this exercise. The function `get_compound_info` allows you to merge your own data with that of the compound metadata. Because our data has USGS parameter codes, we'll use the pcodes to link the two data sources.
+
+```{r}
+my_dat_c <- get_compound_info(my_dat, merge_type = 'pcode', merge_col = 'parm_cd')
+```
+Note that this is the one of the more challenging parts of the workflow. Because some alkylated PAHs do not have CAS numbers, merging by CAS number will be incomplete. Another option is to merge by name, but some PAHs have synonyms. The function attempts to match names by ignoring case and getting rid of punctuation, but it's not perfect. Users can provide their own compound metadata table by setting the `compound_info` argument. 
+
+Additionally, site or sample metadata may be of interest to you and used in subsequent figures or analyses. In this particular example, data come from different watersheds within Milwaukee, Wisconsin. We will merge our PAH concentration data with site metadata (e.g., LULC) to visualize how basin characteristics relate to PAH concentration. These data were published in the supplemental files of Baldwin et al. 2017 and are provided in the `site_metadta` table.
+
+```{r}
+my_dat_c <- left_join(my_dat_c, pah::site_metadata, by = c('site_no' = 'site_id'))
+
+# sites included sample and "source" sites - and we'll filter out 
+# parking lot dust samples to just look at stream samples
+
+my_dat_c <- filter(my_dat_c, sample_type == 'stream sample')
+```
+
+## Step 3: Visualize your data
+
+
+An important first step is to visualize the data to see the magnitude and ranges of PAH concentrations across compounds, sites, or other grouping variables of interest. This can be accomplished using the `plot_pca` function. If your dataset includes a grouping ID (e.g., sites nested within watershets), you can order and label the data by groups. 
+
+
+```{r, fig.show='hold', fig.height = 3, fig.width = 6}
+
+# calculate the sum of the 16 EPA priority compounds
+sum16 <- filter(my_dat_c, EPApriority16 == TRUE) %>%
+  group_by(site_no) %>%
+  summarize(EPA16_sum = sum(result_va)) %>%
+  mutate(variable = 'EPApriority16')
+
+# merge site metadata
+# categorize dominant land use to use for grouping
+sum16_sites <- left_join(sum16, pah::site_metadata, by = c('site_no' = 'site_id')) %>% 
+  mutate(lulc_cat = case_when(natural_area_pct >= 50 ~ 'natural',
+                              agriculture_pct >= 50 ~ 'agricultural',
+                              urban_total_pct >= 50 ~ 'urban',
+                              TRUE ~ 'mixed'))
+
+p <- plot_pah(pah_dat = sum16_sites, conc_column = 'EPA16_sum', sample_id_column = 'site_abbrev', compound_column = 'variable', compound_plot = 'EPApriority16', group_column = 'lulc_cat', color_column = 'lulc_cat')
+
+p +
+  guides(fill = FALSE)
+```
+
+## Step 4 - Generate PAH profiles and calculate distances between source and sample
+
+Both the PCA and profiles analysis require calculating relative concentrations of individual PAHs to compare to source profiles. Source profiles from the literature have been assembled and are included in the built-in `source_profiles` table, but users may use their own table and specify it in the `source_profs` argument in the `pah_profiler` function. To compare source profiles to your samples, you must have concentration data for the same compounds as the sources (use `View(pah::source_profiles` see which compounds are in the source profiles). Source abbreviations are used in the `source_profiles` table, and more information about sources can be found in the built-in `pah::sources` table. 
+
+The function `pah_profiler` identifies compounds in the source profiles and generates relative concentrations to use in subsequent analyses. It then merges the sample and source profiles, and calculates the chi squared distance between all source and sample combinations. Two data frames are returned in a list; the first dataframe has a row for each site-compound-source combination, and includes each sample and source proportional concentration, some compound metadata, and the chi squared difference between the two. The second table has a row for each sample-source combination, where the chi squared values are summed for all compounds in each sample-source combination. 
+
+```{r}
+my_profiles <- pah_profiler(my_dat_c, compound_column = 'casrn', conc_column = 'result_va', sample_column = 'site_no', creosote = 'interpolated')
+
+head(my_profiles$profiles)
+head(my_profiles$sum_chi2)
+
+```
+Next, you can visualize the distances between sources and samples as one way to find the most likely source. The first way we'll do this is by generating a boxplot that summarizes the data by source.
+
+```{r, fig.height = 3, fig.width = 6}
+plot_profiles(my_profiles, source_abbreviation = TRUE, sample_column = 'site_no')
+
+```
+
+The sources closest to zero are the most like the samples. Next, we may want to look at the source and sample profiles associated with the most or least likely sources. We can do that by adjusting the arguments in `plot_profiles`. We'll plot the average sample profile against some of the more likely (closet to zero) and unlikely (furthest from zero) sources.
+```{r, fig.height = 5, fig.width = 7.5}
+plot_profiles(my_profiles, plot_type = 'profile', sources_plot = c('CTD7', 'VAVG', 'CCB1', 'UMO1', 'CRE4', 'OAKS'), 
+              sample_column = 'site_no')
+
+```
+
+In this figure, the black lines show the source profiles, and the red lines show the average (plus 95% confidence interval) across samples for each compound. 
+
+In this example dataset, the samples come from neighboring watersheds, and might expect low variability in profiles across samples. In some studies, you may be intersted in individual sample variability and want to view individual sample profiles instead of study-wide averages. This can be done using the `samples_plot` argument. 
+
+```{r, fig.height = 5, fig.width = 7.5}
+# get a vector of sites numbers
+my_sites <- unique(my_profiles$profiles$site_no)
+
+# plot a the same sources as above, but only a single site
+plot_profiles(my_profiles, plot_type = 'profile', sources_plot = c('CTD7', 'VAVG', 'CCB1', 'UMO1', 'CRE4', 'OAKS'), 
+              sample_column = 'site_no', samples_plot = my_sites[20])
+
+```
+
+## Step 5 - Reduce profiles to PCA axes to assess potential sources
+
+Another way to analyze the source and sample profile data is to do a principle components analysis (PCA) to reduce the number of dimensions of the data. Then, the Euclidean distances between sources and samples in PCA axis space can be calculated to find the nearest or most likely sources. In this step, we'll use the profile data we generated above, but use some new PCA functions. 
+
+The function `pah_pca` uses the function `prcomp` from the `stats` package to perform a principal components analysis on the profile data. The function allows you to set a threshold for the minimum amount of variability an axis must contain to be included in the Euclidean distance calculation. A message outputs to tell the user how many axes were included, and the total amount of variability in the data all retained axes explain. 
+
+``` {r, warning = FALSE}
+my_pca <- pah_pca(my_profiles, perc_cutoff = 10, sample_column = 'site_no')
+```
+
+The output of `pah_pca` includes three tables. The first includes values for each source or sample (rows) and each retained component (columns). The second table shows some statistics from the PCA analysis, including the standard deviation, proportion of variance, and cumulative proportion of variance of each component. Finally, the third table is in long format and shows the Euclidean distance of each sample-source combination. 
+
+The data can either be visualized as a box plot or as a scatter plot. The boxplot is similar to that in the profiles analysis, where values are grouped by sources and summarized.
+
+``` {r, warning = FALSE}
+plot_pca(my_pca)
+```
+
+Additionally, you can create scatterplots of each retained component, and distinguish between sources and samples to visualize the distance between each.
+
+``` {r, warning = FALSE, fig.width = 6, fig.height = 6}
+plot_pca(my_pca, plot_type = 'pca_components')
+```
+
+## Step 6 - calculate and visualize mass fractions
+
+One way to eliminate potential sources is by comparing PAH concentrations in the source to the sample. If the environmental sample has higher PAH concentrations than the source, it is impossible for that source to be the primary source of environmental contamination. To make these comparisons, we will use the built-in table `source_conc`. Some sources have multiple concentrations reported in the literature. When that is the case, the mean concentration is used for comparison. We can either output a table or plot by adjust the logical `plot` argument in the function `calc_mass_fractions`.
+
+First, we'll create a table where each source is compared to quartiles of the samples.
+
+```{r, warnings = FALSE, messages = FALSE}
+my_mass <- calc_mass_fractions(my_dat_c, sample_column = 'site_no', conc_column = 'result_va', compound_column = 'Parameter')
+
+head(my_mass)
+
+```
+
+Next, we'll show a sample by source tile plot, and color code whether the source is impossible (> TOC concentration), unlikely (> 0.5\*TOC concentration), or possible (< 0.5\*TOC concentration). [The dataframe generated by this seems correct, but plotting looks broken. Need to fix.]
+
+
+```{r, warnings = FALSE, messages = FALSE}
+calc_mass_fractions(my_dat_c, sample_column = 'site_no', conc_column = 'result_va', compound_column = 'Parameter', plot = TRUE, calc_type = 'by_sample')
+
+
+```
