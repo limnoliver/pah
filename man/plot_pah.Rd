@@ -7,7 +7,7 @@
 plot_pah(pah_dat, conc_column = "Value", sample_id_column = "Sample",
   compound_column = "Parameter", compound_plot = "Total PAH",
   color_column = NA, group_column = NA, order_column = NA,
-  conc_units = "ppb")
+  conc_units = "ppb", thresholds = TRUE)
 }
 \arguments{
 \item{pah_dat}{dataframe with PAH concentrations. It is recommended that entire samples with censored observations
@@ -32,6 +32,8 @@ bars if no groups are given.}
 
 \item{conc_units}{character string, units for PAH concentration that will be used
 in labels on plots}
+
+\item{thresholds}{logical, whether to include the EPA 16 priority compound thresholds via a horizontal line. This is only appriopriate if the values being plotted are the EPA priority sum concentration.}
 }
 \description{
 Create a bar plot of PAH concentrations. The function allows you to group the data by one

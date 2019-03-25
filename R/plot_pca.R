@@ -8,7 +8,7 @@
 #' @param plot_type Which plot to create. Options include 'distance_boxplot' which summarizes the Euclidean
 #' distances by source, 'pca_components' which shows where the sources and samples lie in all combinations
 #' of the chosen components space.
-#' @param sources a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
+#' @param pah_sources a dataframe of source profiles. The default is to use the built-in `source_profiles` table,
 #' but users can provide their own table. This is useful if the user has a source profile to add to the built-in table.
 #' @param source_abbreviation logical, whether source abbreviations should be used when plot_type = 'distance_boxplot'.
 #' @return If plot_type = 'distance_boxplot', a single boxplot is returned with source IDs on the x axis and
@@ -22,13 +22,13 @@
 #' @importFrom cowplot plot_grid
 #' @examples
 
-plot_pca <- function(pca_dat, plot_type = "distance_boxplot", source_abbreviation = FALSE) {
+plot_pca <- function(pca_dat, plot_type = "distance_boxplot", source_abbreviation = FALSE, pah_sources = sources) {
   if (plot_type == "distance_boxplot") {
     distance <- pca_dat$pca_distance
 
     if (source_abbreviation == FALSE) {
       distance <- left_join(distance,
-                            select(pah::sources, source_abbrev, source_short_no_ref),
+                            select(pah_sources, source_abbrev, source_short_no_ref),
                             by = c('source' = 'source_abbrev')) %>%
         select(-source) %>%
         rename(source = source_short_no_ref)
@@ -54,7 +54,7 @@ plot_pca <- function(pca_dat, plot_type = "distance_boxplot", source_abbreviatio
 
     plot_num <- 1
     plot_list <- list()
-    my_labels <- comp_dat$unique_id
+    my_labels <- rownames(comp_dat)
     my_labels[comp_dat$type == 'sample'] <- ""
 
     n_pca <- ncol(comp_dat) - 2
@@ -70,7 +70,7 @@ plot_pca <- function(pca_dat, plot_type = "distance_boxplot", source_abbreviatio
         p <- ggplot(data = temp_dat, aes(x = x, y = y)) +
           geom_point(aes_string(color = 'type'), alpha = 0.5, show.legend = F) +
           geom_text_repel(data = temp_dat,
-                          aes(x = x, y = y, label = my_labels)) +
+                          aes(x = x, y = y, label = my_labels), size = 2) +
           scale_color_manual(values = c('black', 'red')) +
           labs(x = paste('Component', xcol), y = paste('Component', ycol)) +
           theme_classic()
