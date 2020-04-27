@@ -58,7 +58,7 @@ get_compound_info <- function(pah_dat, merge_type = "name", merge_col = "paramet
   }
   if (merge_type == "casrn") {
 
-    temp_dat <- left_join(temp_dat, compound_info$pcode, by = setNames("casrn" = merge_col))
+    temp_dat <- left_join(temp_dat, compound_info, by = setNames("casrn" = merge_col))
 
     if (any(is.na(temp_dat$EPApriority16))) {
       warning(paste0("Not all codes in column ", merge_col, " matched a code in the built-in data frame compound_info, so function did not perform a complete merge. Rows with codes that did not match are included and were given NA values for the new columns."))
